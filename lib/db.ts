@@ -250,6 +250,10 @@ export async function toggleRevokeEditor(editorId: string, currentStatus: boolea
   await updateDoc(doc(db, 'editors', editorId), { revoked: !currentStatus });
 }
 
+export async function toggleVerifyEditor(editorId: string, currentStatus: boolean): Promise<void> {
+  await updateDoc(doc(db, 'editors', editorId), { verified: !currentStatus });
+}
+
 export async function updateEditorProfile(editorId: string, data: Partial<Editor>): Promise<void> {
   await updateDoc(doc(db, 'editors', editorId), data);
 }

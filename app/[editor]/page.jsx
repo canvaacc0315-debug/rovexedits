@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { getEditorBySlug, getEditsByEditor, incrementDownloads } from '@/lib/db';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowLeft, MessageCircle, AtSign, Gamepad2, Play, Download, X, Image as ImageIcon, Users, CircleDot, Star } from 'lucide-react';
+import { ArrowLeft, MessageCircle, AtSign, Gamepad2, Play, Download, X, Image as ImageIcon, Users, CircleDot, Star, BadgeCheck } from 'lucide-react';
 import RatingModal from '@/components/RatingModal';
 
 export default function EditorProfilePage() {
@@ -111,8 +111,9 @@ export default function EditorProfilePage() {
           </div>
 
           {/* Name */}
-          <h1 style={{ fontSize: 'clamp(1.6rem, 5vw, 2.5rem)', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
+          <h1 style={{ fontSize: 'clamp(1.6rem, 5vw, 2.5rem)', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
             <span style={{ color: '#ff4655' }}>{editor.name}</span>
+            {editor.verified && <BadgeCheck size={28} color="#00ffd4" style={{ flexShrink: 0 }} />}
           </h1>
 
           {/* Rating */}

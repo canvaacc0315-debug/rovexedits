@@ -218,6 +218,11 @@ export default function AdminPage() {
     catch (err) { alert('Failed: ' + err.message); }
   };
 
+  const handleToggleVerify = async (editor) => {
+    try { const { toggleVerifyEditor } = await import('@/lib/db'); await toggleVerifyEditor(editor.id, editor.verified || false); setEditors(await getAllEditors()); }
+    catch (err) { alert('Failed: ' + err.message); }
+  };
+
   const handleDeleteEditor = async (editorId, editorName) => {
     if (!confirm(`DELETE ${editorName}? Cannot be undone.`)) return;
     try { const { deleteEditor, getAllEditors } = await import('@/lib/db'); await deleteEditor(editorId); setEditors(await getAllEditors()); }
@@ -390,7 +395,10 @@ export default function AdminPage() {
                 <tbody>{editors.length === 0 ? <tr><td colSpan={7} style={{ padding: 20, textAlign: 'center', color: 'var(--text-dim)' }}>No editors found.</td></tr> : editors.map(e => (
                   <tr key={e.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                     <td style={{ padding: '14px 16px', fontWeight: 500 }}>
-                      {editingEditorId === e.id ? <input className="input" style={{ padding: '4px 8px', fontSize: '0.75rem', height: 'auto' }} value={editEditorData.name} onChange={(ev) => setEditEditorData({...editEditorData, name: ev.target.value})} /> : e.name}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        {editingEditorId === e.id ? <input className="input" style={{ padding: '4px 8px', fontSize: '0.75rem', height: 'auto' }} value={editEditorData.name} onChange={(ev) => setEditEditorData({...editEditorData, name: ev.target.value})} /> : e.name}
+                        {e.verified && <span style={{ padding: '2px 6px', borderRadius: 6, fontSize: '0.55rem', fontFamily: 'var(--font-mono)', background: 'rgba(0,255,212,0.1)', color: '#00ffd4' }}>✓ Verified</span>}
+                      </div>
                     </td>
                     <td style={{ padding: '14px 16px', color: 'var(--color-accent)' }}>{e.code}</td>
                     <td style={{ padding: '14px 16px' }}>
@@ -419,6 +427,7 @@ export default function AdminPage() {
                             <button className="btn btn-ghost" style={{ padding: '4px 10px', fontSize: '0.65rem', color: '#00ffd4', borderColor: 'rgba(0,255,212,0.3)' }} onClick={() => handleRenewEditor(e.id, e.expiresAt, renewDays[e.id] || 30)}>Renew</button>
                           </div>
                           <button className="btn btn-ghost" style={{ padding: '4px 10px', fontSize: '0.65rem' }} onClick={() => handleToggleRevoke(e)}>{e.revoked ? 'Unrevoke' : 'Revoke'}</button>
+                          <button className="btn btn-ghost" style={{ padding: '4px 10px', fontSize: '0.65rem', color: e.verified ? 'var(--color-primary)' : '#00ffd4', borderColor: e.verified ? 'rgba(255,70,85,0.3)' : 'rgba(0,255,212,0.3)' }} onClick={() => handleToggleVerify(e)}>{e.verified ? 'Unverify' : 'Verify'}</button>
                           <button className="btn btn-ghost" style={{ padding: '4px 10px', fontSize: '0.65rem', color: 'var(--color-primary)', borderColor: 'rgba(255,70,85,0.3)' }} onClick={() => handleDeleteEditor(e.id, e.name)}><Trash2 size={12} /></button>
                         </>
                       )}

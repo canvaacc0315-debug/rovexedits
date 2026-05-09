@@ -44,6 +44,7 @@ export interface Editor {
   maxUploads: number;
   usedCount: number;
   revoked: boolean;
+  verified?: boolean;
   clerkId?: string;
   sessionDurationHours: number;
   createdAt: number;
