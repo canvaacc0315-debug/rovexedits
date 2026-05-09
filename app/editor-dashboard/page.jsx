@@ -32,7 +32,7 @@ export default function EditorDashboard() {
 
   useEffect(() => {
     if (!isLoaded || !isSignedIn || !user) { setCheckingLink(false); return; }
-    setCheckingLink(true);
+    if (!session) setCheckingLink(true);
     const userEmail = user.emailAddresses?.[0]?.emailAddress;
     getEditorByClerkId(user.id).then(async editor => {
       if (editor) {
@@ -52,7 +52,7 @@ export default function EditorDashboard() {
       }
       setCheckingLink(false);
     }).catch(() => setCheckingLink(false));
-  }, [isLoaded, isSignedIn, user]);
+  }, [isLoaded, isSignedIn, user?.id, session?.editorId]);
 
   useEffect(() => {
     if (!session) return;
@@ -194,7 +194,7 @@ export default function EditorDashboard() {
         <div style={{ fontSize: '2.5rem', marginBottom: 16 }}>🔑</div>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', letterSpacing: '0.1em', marginBottom: 8 }}>Become an Editor</h1>
         <p style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginBottom: 24 }}>Enter your editor code to link your account.</p>
-        <input className="input" type="text" placeholder="ROVEX-XXX-XXXX" value={code} onChange={e => setCode(e.target.value.toUpperCase())} onKeyDown={e => e.key === 'Enter' && handleLinkEditor()} style={{ marginBottom: 16, textAlign: 'center', letterSpacing: '0.15em', fontFamily: 'var(--font-mono)' }} />
+        <input className="input" type="text" placeholder="ROVEX-XXX-XXXX" value={code} onChange={e => setCode(e.target.value.toUpperCase())} onKeyDown={e => e.key === 'Enter' && !linking && handleLinkEditor()} style={{ marginBottom: 16, textAlign: 'center', letterSpacing: '0.15em', fontFamily: 'var(--font-mono)' }} />
         {error && <p style={{ color: 'var(--color-primary)', fontSize: '0.8rem', marginBottom: 12 }}>{error}</p>}
         <div style={{ display: 'flex', gap: 10 }}>
           <a href="/" className="btn btn-ghost" style={{ flex: 1, justifyContent: 'center' }}>Cancel</a>
