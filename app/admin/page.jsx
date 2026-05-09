@@ -47,6 +47,33 @@ export default function AdminPage() {
   const [newLink, setNewLink] = useState({ name: '', url: '', description: '', image: '', color: '#ff4655', type: 'store', verified: true, order: 0 });
   const [editingLinkId, setEditingLinkId] = useState(null);
   const [editLinkData, setEditLinkData] = useState({});
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [uploadingEditLogo, setUploadingEditLogo] = useState(false);
+  const logoInputRef = useRef(null);
+  const editLogoInputRef = useRef(null);
+
+  const handleLogoUpload = async (file, mode) => {
+    if (!file) return;
+    const setUploading = mode === 'add' ? setUploadingLogo : setUploadingEditLogo;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/upload', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || 'Upload failed');
+      const imageUrl = data.thumbUrl || data.imageUrl;
+      if (mode === 'add') {
+        setNewLink(prev => ({ ...prev, image: imageUrl }));
+      } else {
+        setEditLinkData(prev => ({ ...prev, image: imageUrl }));
+      }
+    } catch (err) {
+      alert('Logo upload failed: ' + err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
   const [loading, setLoading] = useState(true);
   const [showUpload, setShowUpload] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -473,7 +500,18 @@ export default function AdminPage() {
                 <div><label style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: 4, display: 'block' }}>URL *</label><input type="url" className="input" placeholder={newLink.type === 'whatsapp' ? 'https://chat.whatsapp.com/...' : 'https://www.example.com'} value={newLink.url} onChange={e => setNewLink({...newLink, url: e.target.value})} required /></div>
                 <div><label style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: 4, display: 'block' }}>Description</label><input type="text" className="input" placeholder="Short description of this link" value={newLink.description} onChange={e => setNewLink({...newLink, description: e.target.value})} /></div>
                 <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                  <div style={{ flex: 2, minWidth: 200 }}><label style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: 4, display: 'block' }}>Image URL (logo)</label><input type="text" className="input" placeholder="/logo.png or https://..." value={newLink.image} onChange={e => setNewLink({...newLink, image: e.target.value})} /></div>
+                  <div style={{ flex: 2, minWidth: 200 }}>
+                    <label style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: 4, display: 'block' }}>Logo Image</label>
+                    <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                      {newLink.image && <div style={{ width: 44, height: 44, borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}><img src={newLink.image} alt="Logo preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>}
+                      <input type="file" accept="image/*" ref={logoInputRef} onChange={e => handleLogoUpload(e.target.files?.[0], 'add')} style={{ display: 'none' }} />
+                      <button type="button" className="btn btn-ghost" style={{ fontSize: '0.7rem', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6 }} onClick={() => logoInputRef.current?.click()} disabled={uploadingLogo}>
+                        <Upload size={12} /> {uploadingLogo ? 'Uploading...' : 'Upload Logo'}
+                      </button>
+                      <span style={{ fontSize: '0.65rem', color: 'var(--text-dim)' }}>or</span>
+                      <input type="text" className="input" placeholder="Paste image URL" value={newLink.image} onChange={e => setNewLink({...newLink, image: e.target.value})} style={{ flex: 1, minWidth: 140 }} />
+                    </div>
+                  </div>
                   <div style={{ flex: 1, minWidth: 100 }}><label style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: 4, display: 'block' }}>Accent Color</label><div style={{ display: 'flex', gap: 8, alignItems: 'center' }}><input type="color" value={newLink.color} onChange={e => setNewLink({...newLink, color: e.target.value})} style={{ width: 40, height: 36, border: 'none', background: 'none', cursor: 'pointer' }} /><input type="text" className="input" value={newLink.color} onChange={e => setNewLink({...newLink, color: e.target.value})} style={{ flex: 1 }} /></div></div>
                   <div style={{ flex: 1, minWidth: 80 }}><label style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: 4, display: 'block' }}>Order</label><input type="number" className="input" value={newLink.order} onChange={e => setNewLink({...newLink, order: parseInt(e.target.value) || 0})} /></div>
                 </div>
@@ -496,8 +534,11 @@ export default function AdminPage() {
                         </div>
                         <input className="input" placeholder="URL" value={editLinkData.url || ''} onChange={e => setEditLinkData({...editLinkData, url: e.target.value})} />
                         <input className="input" placeholder="Description" value={editLinkData.description || ''} onChange={e => setEditLinkData({...editLinkData, description: e.target.value})} />
-                        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                          <input className="input" placeholder="Image URL" value={editLinkData.image || ''} onChange={e => setEditLinkData({...editLinkData, image: e.target.value})} style={{ flex: 2 }} />
+                        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+                          {editLinkData.image && <div style={{ width: 36, height: 36, borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}><img src={editLinkData.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>}
+                          <input type="file" accept="image/*" ref={editLogoInputRef} onChange={e => handleLogoUpload(e.target.files?.[0], 'edit')} style={{ display: 'none' }} />
+                          <button type="button" className="btn btn-ghost" style={{ fontSize: '0.6rem', padding: '4px 8px', display: 'flex', alignItems: 'center', gap: 4 }} onClick={() => editLogoInputRef.current?.click()} disabled={uploadingEditLogo}><Upload size={10} /> {uploadingEditLogo ? '...' : 'Upload'}</button>
+                          <input className="input" placeholder="Image URL" value={editLinkData.image || ''} onChange={e => setEditLinkData({...editLinkData, image: e.target.value})} style={{ flex: 2, minWidth: 100 }} />
                           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}><input type="color" value={editLinkData.color || '#ff4655'} onChange={e => setEditLinkData({...editLinkData, color: e.target.value})} style={{ width: 32, height: 32, border: 'none', background: 'none', cursor: 'pointer' }} /></div>
                           <input type="number" className="input" placeholder="Order" value={editLinkData.order ?? 0} onChange={e => setEditLinkData({...editLinkData, order: parseInt(e.target.value) || 0})} style={{ width: 60 }} />
                           <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.75rem', color: 'var(--text-dim)' }}><input type="checkbox" checked={editLinkData.verified ?? true} onChange={e => setEditLinkData({...editLinkData, verified: e.target.checked})} />Verified</label>
