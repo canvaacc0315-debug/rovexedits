@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Crown, Shield, Award, Star, Store, MessageCircle, Phone } from 'lucide-react';
+import { Users, Crown, Shield, Award, Star, Store, MessageCircle, Phone, BadgeCheck } from 'lucide-react';
 import { getAllEditors } from '@/lib/db';
 import Link from 'next/link';
 import RatingModal from '@/components/RatingModal';
@@ -137,9 +137,10 @@ export default function EditorsPage() {
                     )}
                   </div>
 
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                     {editor.name}
                     {isVaibhav && <Award size={16} color="#fbbf24" />}
+                    {editor.verified && <BadgeCheck size={18} color="#00ffd4" />}
                   </h3>
 
                   <div style={{ display: 'flex', gap: 2, alignItems: 'center', marginBottom: 20 }}>
