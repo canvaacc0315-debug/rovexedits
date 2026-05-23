@@ -22,6 +22,7 @@ export default function ChatProvider({ children }) {
   const [activeChatPartner, setActiveChatPartner] = useState(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isEditorUser, setIsEditorUser] = useState(false);
+  const [myEditorDocId, setMyEditorDocId] = useState(null);
   const [loading, setLoading] = useState(true);
   const unsubRef = useRef(null);
 
@@ -41,8 +42,10 @@ export default function ChatProvider({ children }) {
         const { getEditorByClerkId } = await import('@/lib/db');
         const editor = await getEditorByClerkId(userId);
         setIsEditorUser(!!editor);
+        setMyEditorDocId(editor?.id || null);
       } catch {
         setIsEditorUser(false);
+        setMyEditorDocId(null);
       }
     };
     checkEditor();
@@ -155,6 +158,7 @@ export default function ChatProvider({ children }) {
     selectConversation,
     goBackToList,
     activeChatPartner,
+    myEditorDocId,
   };
 
   return (
