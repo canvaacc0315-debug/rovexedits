@@ -41,17 +41,24 @@ export default function ChatProvider({ children }) {
     
     const checkEditor = async () => {
       try {
-        const { getEditorByClerkId } = await import('@/lib/db');
-        const editor = await getEditorByClerkId(userId);
+        const { getEditorByClerkId, getEditors } = await import('@/lib/db');
+        let editor = await getEditorByClerkId(userId);
+
+        if (!editor && isAdmin) {
+           const allEditors = await getEditors();
+           editor = allEditors.find(e => e.isAdmin || e.email === 'vaibhavpatilpro@gmail.com' || e.name?.toLowerCase() === 'vaibhav' || e.name?.toLowerCase() === 'va1bhav');
+        }
+
         setIsEditorUser(!!editor);
         setMyEditorDocId(editor?.id || null);
-      } catch {
+      } catch (err) {
+        console.error("Chat checkEditor error:", err);
         setIsEditorUser(false);
         setMyEditorDocId(null);
       }
     };
     checkEditor();
-  }, [userId]);
+  }, [userId, isAdmin]);
 
   // Real-time listener for conversations
   useEffect(() => {
@@ -65,6 +72,8 @@ export default function ChatProvider({ children }) {
 
     const queries = [];
     
+    console.log('[CHAT DEBUG] Setting up listener for userId:', userId, 'isAdmin:', isAdmin, 'myEditorDocId:', myEditorDocId);
+
     // Normal query for user's actual Clerk ID
     queries.push(query(
       collection(db, 'conversations'),
@@ -74,6 +83,7 @@ export default function ChatProvider({ children }) {
 
     // Admin query for 'admin' string
     if (isAdmin) {
+      console.log('[CHAT DEBUG] Adding admin listener query');
       queries.push(query(
         collection(db, 'conversations'),
         where('participants', 'array-contains', 'admin'),
@@ -83,6 +93,7 @@ export default function ChatProvider({ children }) {
 
     // Editor query for their editor profile ID
     if (myEditorDocId && myEditorDocId !== 'admin') {
+      console.log('[CHAT DEBUG] Adding editor listener query for:', myEditorDocId);
       queries.push(query(
         collection(db, 'conversations'),
         where('participants', 'array-contains', myEditorDocId),
