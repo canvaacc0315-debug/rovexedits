@@ -1,17 +1,15 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, Smile, X } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { useChatContext } from './ChatProvider';
 import { sendMessage } from '@/lib/chat';
 import { sendNotificationViaAPI } from '@/lib/notifications';
-import GifPicker from './GifPicker';
 
 export default function ChatInput({ conversationId }) {
   const { userId, userName, userAvatar, conversations, isAdmin, myEditorDocId } = useChatContext();
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
-  const [showGifPicker, setShowGifPicker] = useState(false);
   const textareaRef = useRef(null);
 
   // Get the other participant for notification
@@ -59,29 +57,6 @@ export default function ChatInput({ conversationId }) {
     }
   };
 
-  const handleGifSelect = async (gifUrl, gifPreview) => {
-    if (sending || !userId) return;
-    setSending(true);
-    setShowGifPicker(false);
-
-    try {
-      await sendMessage(conversationId, userId, userName, userAvatar, '🎞️ GIF', 'gif', gifUrl, senderAliases);
-
-      if (otherParticipantId) {
-        sendNotificationViaAPI(
-          otherParticipantId,
-          `${userName}`,
-          '🎞️ Sent a GIF',
-          { conversationId, url: '/' }
-        ).catch(() => {});
-      }
-    } catch (err) {
-      console.error('Failed to send GIF:', err);
-    } finally {
-      setSending(false);
-    }
-  };
-
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -91,49 +66,15 @@ export default function ChatInput({ conversationId }) {
 
   return (
     <div style={{ flexShrink: 0, position: 'relative' }}>
-      {/* GIF Picker */}
-      {showGifPicker && (
-        <div style={{
-          position: 'absolute',
-          bottom: '100%',
-          left: 0,
-          right: 0,
-          zIndex: 10,
-        }}>
-          <GifPicker onSelect={handleGifSelect} onClose={() => setShowGifPicker(false)} />
-        </div>
-      )}
-
       {/* Input bar */}
       <div style={{
         padding: '12px 16px',
         borderTop: '1px solid rgba(255, 255, 255, 0.06)',
         background: 'rgba(255, 255, 255, 0.02)',
         display: 'flex',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         gap: 8,
       }}>
-        {/* GIF button */}
-        <button
-          onClick={() => setShowGifPicker(!showGifPicker)}
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: 10,
-            background: showGifPicker ? 'rgba(255, 70, 85, 0.15)' : 'rgba(255, 255, 255, 0.06)',
-            border: showGifPicker ? '1px solid rgba(255, 70, 85, 0.3)' : '1px solid rgba(255, 255, 255, 0.06)',
-            color: showGifPicker ? '#ff4655' : 'rgba(255, 255, 255, 0.4)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            transition: 'all 0.2s',
-          }}
-        >
-          {showGifPicker ? <X size={16} /> : <Smile size={16} />}
-        </button>
-
         {/* Text area */}
         <div style={{
           flex: 1,
