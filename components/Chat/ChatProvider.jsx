@@ -63,31 +63,55 @@ export default function ChatProvider({ children }) {
 
     setLoading(true);
 
-    const q = query(
+    const queries = [];
+    
+    // Normal query for user's actual ID
+    queries.push(query(
       collection(db, 'conversations'),
       where('participants', 'array-contains', userId),
       orderBy('updatedAt', 'desc')
-    );
+    ));
 
-    const unsub = onSnapshot(q, (snapshot) => {
-      const convos = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setConversations(convos);
+    // Admin query for 'admin' string
+    if (isAdmin) {
+      queries.push(query(
+        collection(db, 'conversations'),
+        where('participants', 'array-contains', 'admin'),
+        orderBy('updatedAt', 'desc')
+      ));
+    }
+
+    const unsubs = [];
+    const convosMap = new Map();
+
+    const handleSnapshot = (snapshot) => {
+      snapshot.docs.forEach(doc => {
+        convosMap.set(doc.id, { id: doc.id, ...doc.data() });
+      });
+      // Convert map to array and sort by updatedAt desc
+      const sortedConvos = Array.from(convosMap.values()).sort((a, b) => b.updatedAt - a.updatedAt);
+      setConversations(sortedConvos);
       setLoading(false);
-    }, (error) => {
-      console.error('Chat listener error:', error);
-      setLoading(false);
+    };
+
+    queries.forEach(q => {
+      const unsub = onSnapshot(q, handleSnapshot, (error) => {
+        console.error('Chat listener error:', error);
+        setLoading(false);
+      });
+      unsubs.push(unsub);
     });
 
-    unsubRef.current = unsub;
-    return () => { if (unsubRef.current) unsubRef.current(); };
-  }, [isSignedIn, userId]);
+    return () => {
+      unsubs.forEach(u => u());
+    };
+  }, [isSignedIn, userId, isAdmin]);
 
   // Calculate total unread
   const totalUnread = conversations.reduce((sum, c) => {
-    return sum + (c.unreadCount?.[userId] || 0);
+    const userUnread = c.unreadCount?.[userId] || 0;
+    const adminUnread = isAdmin ? (c.unreadCount?.['admin'] || 0) : 0;
+    return sum + userUnread + adminUnread;
   }, 0);
 
   // Open chat with a specific editor
@@ -113,6 +137,7 @@ export default function ChatProvider({ children }) {
 
       // Mark as read
       await markAsRead(conversation.id, userId);
+      if (isAdmin) await markAsRead(conversation.id, 'admin');
     } catch (err) {
       console.error('Error opening chat:', err);
     }
@@ -134,9 +159,12 @@ export default function ChatProvider({ children }) {
   const selectConversation = useCallback(async (conversationId) => {
     setActiveConversation(conversationId);
     if (userId) {
-      try { await markAsRead(conversationId, userId); } catch {}
+      try { 
+        await markAsRead(conversationId, userId); 
+        if (isAdmin) await markAsRead(conversationId, 'admin');
+      } catch {}
     }
-  }, [userId]);
+  }, [userId, isAdmin]);
 
   // Go back to list
   const goBackToList = useCallback(() => {

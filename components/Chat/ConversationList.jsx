@@ -5,7 +5,7 @@ import { useChatContext } from './ChatProvider';
 import { MessageCircle } from 'lucide-react';
 
 export default function ConversationList() {
-  const { conversations, selectConversation, userId, loading } = useChatContext();
+  const { conversations, selectConversation, userId, loading, isAdmin } = useChatContext();
 
   const formatTime = (timestamp) => {
     if (!timestamp) return '';
@@ -80,9 +80,9 @@ export default function ConversationList() {
   return (
     <div style={{ overflowY: 'auto', flex: 1, padding: '8px 0' }}>
       {conversations.map((convo, i) => {
-        const otherParticipantId = convo.participants?.find(p => p !== userId);
+        const otherParticipantId = convo.participants?.find(p => p !== userId && p !== 'admin');
         const other = convo.participantDetails?.[otherParticipantId] || {};
-        const unread = convo.unreadCount?.[userId] || 0;
+        const unread = (convo.unreadCount?.[userId] || 0) + (isAdmin ? (convo.unreadCount?.['admin'] || 0) : 0);
         const lastMsg = convo.lastMessage;
 
         return (

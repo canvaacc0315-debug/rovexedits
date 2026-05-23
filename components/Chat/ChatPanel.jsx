@@ -15,7 +15,7 @@ import { markAsRead } from '@/lib/chat';
 export default function ChatPanel() {
   const {
     isChatOpen, closeChat, activeConversation, goBackToList,
-    conversations, userId, activeChatPartner
+    conversations, userId, activeChatPartner, isAdmin
   } = useChatContext();
 
   const [messages, setMessages] = useState([]);
@@ -25,7 +25,7 @@ export default function ChatPanel() {
 
   // Get active conversation details
   const activeConvo = conversations.find(c => c.id === activeConversation);
-  const otherParticipantId = activeConvo?.participants?.find(p => p !== userId) || activeChatPartner?.id;
+  const otherParticipantId = activeConvo?.participants?.find(p => p !== userId && p !== 'admin') || activeChatPartner?.id;
   const otherParticipant = activeConvo?.participantDetails?.[otherParticipantId] || activeChatPartner || {};
 
   // Listen for messages in active conversation
@@ -44,7 +44,10 @@ export default function ChatPanel() {
       setMessagesLoading(false);
 
       // Mark as read
-      if (userId) markAsRead(activeConversation, userId).catch(() => {});
+      if (userId) {
+        markAsRead(activeConversation, userId).catch(() => {});
+        if (isAdmin) markAsRead(activeConversation, 'admin').catch(() => {});
+      }
     });
 
     return () => unsub();

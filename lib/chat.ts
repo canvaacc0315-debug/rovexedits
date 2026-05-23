@@ -82,7 +82,8 @@ export async function sendMessage(
   senderAvatar: string | null,
   text: string,
   type: 'text' | 'gif' = 'text',
-  mediaUrl?: string
+  mediaUrl?: string,
+  isAdmin?: boolean
 ): Promise<string> {
   try {
     const messagesRef = collection(db, 'conversations', conversationId, 'messages');
@@ -109,7 +110,7 @@ export async function sendMessage(
 
       // Increment unread count for all participants except the sender
       for (const participantId of convData.participants) {
-        if (participantId !== senderId) {
+        if (participantId !== senderId && !(isAdmin && participantId === 'admin')) {
           newUnreadCount[participantId] = (newUnreadCount[participantId] || 0) + 1;
         }
       }
