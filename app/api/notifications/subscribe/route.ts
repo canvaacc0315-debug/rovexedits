@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
+import { getAdminDb } from '@/lib/firebase-admin';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,17 +15,17 @@ export async function POST(request: Request) {
     }
 
     // Check if token already exists
-    const existingDoc = await adminDb.collection('fcmTokens').doc(token).get();
+    const existingDoc = await getAdminDb().collection('fcmTokens').doc(token).get();
 
     if (existingDoc.exists) {
       // Update lastActive
-      await adminDb.collection('fcmTokens').doc(token).update({
+      await getAdminDb().collection('fcmTokens').doc(token).update({
         lastActive: Date.now(),
         userId, // Update userId in case it changed
       });
     } else {
       // Create new token doc
-      await adminDb.collection('fcmTokens').doc(token).set({
+      await getAdminDb().collection('fcmTokens').doc(token).set({
         id: token,
         userId,
         token,

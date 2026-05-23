@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { adminDb, adminMessaging } from '@/lib/firebase-admin';
+import { getAdminDb, getAdminMessaging } from '@/lib/firebase-admin';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     }
 
     // Look up all FCM tokens for the target user
-    const tokensSnapshot = await adminDb
+    const tokensSnapshot = await getAdminDb()
       .collection('fcmTokens')
       .where('userId', '==', targetUserId)
       .get();
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       const tokenData = tokenDoc.data();
 
       try {
-        await adminMessaging.send({
+        await getAdminMessaging().send({
           token: tokenData.token,
           notification: { title, body },
           webpush: {
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
 
     // Clean up invalid tokens
     for (const tokenId of invalidTokens) {
-      await adminDb.collection('fcmTokens').doc(tokenId).delete();
+      await getAdminDb().collection('fcmTokens').doc(tokenId).delete();
     }
 
     return NextResponse.json({ success: true, sent, cleaned: invalidTokens.length });

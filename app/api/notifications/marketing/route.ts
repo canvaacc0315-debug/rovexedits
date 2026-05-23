@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { adminDb, adminMessaging } from '@/lib/firebase-admin';
+import { getAdminDb, getAdminMessaging } from '@/lib/firebase-admin';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,9 +20,9 @@ const DEFAULT_MESSAGES = [
 ];
 
 async function seedDefaultMessages() {
-  const batch = adminDb.batch();
+  const batch = getAdminDb().batch();
   for (const msg of DEFAULT_MESSAGES) {
-    const ref = adminDb.collection('marketingMessages').doc();
+    const ref = getAdminDb().collection('marketingMessages').doc();
     batch.set(ref, {
       id: ref.id,
       title: msg.title,
@@ -47,7 +47,7 @@ export async function GET(request: Request) {
     }
 
     // Fetch active marketing messages
-    const msgsSnapshot = await adminDb
+    const msgsSnapshot = await getAdminDb()
       .collection('marketingMessages')
       .where('active', '==', true)
       .get();
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
     const selected = messages[0] as any;
 
     // Fetch all FCM tokens
-    const tokensSnapshot = await adminDb.collection('fcmTokens').get();
+    const tokensSnapshot = await getAdminDb().collection('fcmTokens').get();
 
     if (tokensSnapshot.empty) {
       return NextResponse.json({ success: true, message: selected.title, recipientCount: 0 });
@@ -73,7 +73,7 @@ export async function GET(request: Request) {
     const tokens = tokensSnapshot.docs.map(d => d.data().token);
 
     // Send to all tokens using sendEachForMulticast
-    const response = await adminMessaging.sendEachForMulticast({
+    const response = await getAdminMessaging().sendEachForMulticast({
       tokens,
       notification: {
         title: selected.title,
@@ -105,7 +105,7 @@ export async function GET(request: Request) {
 
     // Delete invalid tokens
     for (const invalidToken of invalidTokens) {
-      const tokenDocs = await adminDb
+      const tokenDocs = await getAdminDb()
         .collection('fcmTokens')
         .where('token', '==', invalidToken)
         .get();
@@ -115,7 +115,7 @@ export async function GET(request: Request) {
     }
 
     // Update sent count
-    await adminDb.collection('marketingMessages').doc(selected.id).update({
+    await getAdminDb().collection('marketingMessages').doc(selected.id).update({
       sentCount: (selected.sentCount || 0) + 1,
       lastSentAt: Date.now(),
     });

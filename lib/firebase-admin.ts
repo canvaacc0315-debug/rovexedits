@@ -1,41 +1,40 @@
 // ═══════════════════════════════════════════════════════════════
-// Firebase Admin SDK — Server-Side Only
+// Firebase Admin SDK — Server-Side Only (Lazy Initialization)
 // ═══════════════════════════════════════════════════════════════
 
 import { initializeApp, getApps, cert, type App } from 'firebase-admin/app';
-import { getFirestore, type Firestore } from 'firebase-admin/firestore';
-import { getMessaging, type Messaging } from 'firebase-admin/messaging';
+import { getFirestore } from 'firebase-admin/firestore';
+import { getMessaging } from 'firebase-admin/messaging';
 
-function getPrivateKey(): string | undefined {
-  const key = process.env.FIREBASE_ADMIN_PRIVATE_KEY;
-  if (!key) return undefined;
-  // Handle all possible formats Vercel might store the key in
-  return key.replace(/\\n/g, '\n');
-}
+function getAdminApp(): App {
+  if (getApps().length > 0) {
+    return getApps()[0];
+  }
 
-let adminApp: App;
-let adminDb: Firestore;
-let adminMessaging: Messaging;
+  const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY;
+  
+  if (!privateKey) {
+    console.warn('Firebase Admin: FIREBASE_ADMIN_PRIVATE_KEY not set.');
+    return initializeApp();
+  }
 
-const privateKey = getPrivateKey();
+  // Replace literal \n with actual newlines
+  const formattedKey = privateKey.replace(/\\n/g, '\n');
 
-if (getApps().length === 0 && privateKey) {
-  adminApp = initializeApp({
+  return initializeApp({
     credential: cert({
       projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
       clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
-      privateKey: privateKey,
+      privateKey: formattedKey,
     }),
   });
-} else if (getApps().length > 0) {
-  adminApp = getApps()[0];
-} else {
-  // No private key and no existing app — create a dummy to prevent build errors
-  console.warn('Firebase Admin: FIREBASE_ADMIN_PRIVATE_KEY not set. Push notifications will not work.');
-  adminApp = initializeApp();
 }
 
-adminDb = getFirestore(adminApp);
-adminMessaging = getMessaging(adminApp);
+// Lazy getters — only initialize when actually called from an API route
+export function getAdminDb() {
+  return getFirestore(getAdminApp());
+}
 
-export { adminApp, adminDb, adminMessaging };
+export function getAdminMessaging() {
+  return getMessaging(getAdminApp());
+}
