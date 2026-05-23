@@ -3,11 +3,43 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '@/lib/firebase';
 import { getOrCreateConversation, markAsRead, getConversationsForUser } from '@/lib/chat';
 import usePresenceTracker from '@/hooks/usePresenceTracker';
 
 const ChatContext = createContext(null);
+
+const playNotificationSound = () => {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    
+    const playDing = (freq, startTime) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.5, startTime + 0.1);
+      
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(0.3, startTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.4);
+      
+      osc.start(startTime);
+      osc.stop(startTime + 0.4);
+    };
+    
+    playDing(880, ctx.currentTime);
+    playDing(1108.73, ctx.currentTime + 0.15);
+  } catch (e) {
+    // Ignore audio errors
+  }
+};
 
 export function useChatContext() {
   const ctx = useContext(ChatContext);
@@ -24,7 +56,9 @@ export default function ChatProvider({ children }) {
   const [isEditorUser, setIsEditorUser] = useState(false);
   const [myEditorDocId, setMyEditorDocId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState(null);
   const unsubRef = useRef(null);
+  const lastUpdateRef = useRef(0);
 
   // Track current user's online presence
   usePresenceTracker();
@@ -146,6 +180,30 @@ export default function ChatProvider({ children }) {
     return sum + userUnread + adminUnread + editorUnread;
   }, 0);
 
+  // Trigger in-app notification when a new message arrives
+  useEffect(() => {
+    const latestConvo = conversations[0];
+    if (!latestConvo) return;
+
+    if (lastUpdateRef.current && latestConvo.updatedAt > lastUpdateRef.current) {
+      const msg = latestConvo.lastMessage;
+      // Ensure we didn't send it ourselves
+      if (msg && msg.senderId !== userId && msg.senderId !== myEditorDocId && msg.senderId !== 'admin') {
+        playNotificationSound();
+        const sender = latestConvo.participantDetails?.[msg.senderId];
+        setToast({
+          convoId: latestConvo.id,
+          title: sender?.name || 'New Message',
+          body: msg.type === 'text' ? msg.text : 'Sent an attachment',
+          avatar: sender?.avatar
+        });
+        setTimeout(() => setToast(null), 4500);
+      }
+    }
+    
+    lastUpdateRef.current = latestConvo.updatedAt;
+  }, [conversations, userId, myEditorDocId, isAdmin]);
+
   // Open chat with a specific editor
   const openChat = useCallback(async (editorId, editorDetails) => {
     if (!userId) return;
@@ -229,6 +287,46 @@ export default function ChatProvider({ children }) {
   return (
     <ChatContext.Provider value={value}>
       {children}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: -50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.9 }}
+            style={{
+              position: 'fixed',
+              top: 24,
+              right: 24,
+              zIndex: 99999,
+              background: 'rgba(20, 20, 20, 0.9)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 70, 85, 0.3)',
+              borderRadius: 16,
+              padding: '12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              setToast(null);
+              setIsChatOpen(true);
+              selectConversation(toast.convoId);
+            }}
+          >
+            {toast.avatar && (
+              <img src={toast.avatar} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+            )}
+            <div>
+              <div style={{ color: '#fff', fontSize: '0.9rem', fontWeight: 600 }}>{toast.title}</div>
+              <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.85rem' }}>
+                {toast.body.length > 30 ? toast.body.substring(0, 30) + '...' : toast.body}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </ChatContext.Provider>
   );
 }
