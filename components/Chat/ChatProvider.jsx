@@ -30,10 +30,11 @@ export default function ChatProvider({ children }) {
   usePresenceTracker();
 
   const userId = user?.id;
-  const userEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
+  const userEmail = user?.primaryEmailAddress?.emailAddress;
+  const userEmails = user?.emailAddresses?.map(e => e.emailAddress.toLowerCase()) || [];
   const userName = user?.fullName || user?.firstName || 'User';
   const userAvatar = user?.imageUrl || null;
-  const isAdmin = userEmail === 'vaibhavpatilpro@gmail.com';
+  const isAdmin = userEmails.includes('vaibhavpatilpro@gmail.com');
 
   // Check if the current user is an editor
   useEffect(() => {
