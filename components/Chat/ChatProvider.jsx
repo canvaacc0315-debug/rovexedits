@@ -78,8 +78,7 @@ export default function ChatProvider({ children }) {
     // Normal query for user's actual Clerk ID
     queries.push(query(
       collection(db, 'conversations'),
-      where('participants', 'array-contains', userId),
-      orderBy('updatedAt', 'desc')
+      where('participants', 'array-contains', userId)
     ));
 
     // Admin query for 'admin' string
@@ -87,8 +86,7 @@ export default function ChatProvider({ children }) {
       console.log('[CHAT DEBUG] Adding admin listener query');
       queries.push(query(
         collection(db, 'conversations'),
-        where('participants', 'array-contains', 'admin'),
-        orderBy('updatedAt', 'desc')
+        where('participants', 'array-contains', 'admin')
       ));
     }
 
@@ -97,8 +95,7 @@ export default function ChatProvider({ children }) {
       console.log('[CHAT DEBUG] Adding editor listener query for:', myEditorDocId);
       queries.push(query(
         collection(db, 'conversations'),
-        where('participants', 'array-contains', myEditorDocId),
-        orderBy('updatedAt', 'desc')
+        where('participants', 'array-contains', myEditorDocId)
       ));
     }
 

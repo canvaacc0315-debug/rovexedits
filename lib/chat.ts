@@ -171,11 +171,11 @@ export async function getConversationsForUser(userId: string): Promise<Conversat
   try {
     const q = query(
       collection(db, 'conversations'),
-      where('participants', 'array-contains', userId),
-      orderBy('updatedAt', 'desc')
+      where('participants', 'array-contains', userId)
     );
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Conversation));
+    const convos = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Conversation));
+    return convos.sort((a, b) => b.updatedAt - a.updatedAt);
   } catch (error) {
     console.error('Error fetching user conversations:', error);
     return [];
@@ -188,11 +188,11 @@ export async function getConversationsForEditor(editorId: string): Promise<Conve
   try {
     const q = query(
       collection(db, 'conversations'),
-      where('participants', 'array-contains', editorId),
-      orderBy('updatedAt', 'desc')
+      where('participants', 'array-contains', editorId)
     );
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Conversation));
+    const convos = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Conversation));
+    return convos.sort((a, b) => b.updatedAt - a.updatedAt);
   } catch (error) {
     console.error('Error fetching editor conversations:', error);
     return [];
