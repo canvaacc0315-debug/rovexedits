@@ -106,8 +106,21 @@ export default function ChatProvider({ children }) {
       snapshot.docs.forEach(doc => {
         convosMap.set(doc.id, { id: doc.id, ...doc.data() });
       });
-      // Convert map to array and sort by updatedAt desc
-      const sortedConvos = Array.from(convosMap.values()).sort((a, b) => b.updatedAt - a.updatedAt);
+      
+      let sortedConvos = Array.from(convosMap.values()).sort((a, b) => b.updatedAt - a.updatedAt);
+      
+      const aliases = [userId];
+      if (isAdmin) aliases.push('admin');
+      if (myEditorDocId) aliases.push(myEditorDocId);
+
+      sortedConvos = sortedConvos.filter(convo => {
+        if (!convo.deletedBy || convo.deletedBy.length === 0) return true;
+        const myAliasesInConvo = aliases.filter(a => convo.participants?.includes(a));
+        if (myAliasesInConvo.length === 0) return true;
+        const allMyAliasesDeleted = myAliasesInConvo.every(a => convo.deletedBy.includes(a));
+        return !allMyAliasesDeleted;
+      });
+
       setConversations(sortedConvos);
       setLoading(false);
     };

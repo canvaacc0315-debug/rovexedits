@@ -146,7 +146,7 @@ export default function EditorsPage() {
                   </h3>
 
                   {/* Online Status */}
-                  <OnlineStatus userId={editor.id} size="sm" style={{ marginBottom: 8, justifyContent: 'center' }} />
+                  <OnlineStatus userId={editor.id} size="sm" hideIfOffline={true} style={{ marginBottom: 8, justifyContent: 'center' }} />
 
                   <div style={{ display: 'flex', gap: 2, alignItems: 'center', marginBottom: 20 }}>
                     {[1, 2, 3, 4, 5].map(star => {

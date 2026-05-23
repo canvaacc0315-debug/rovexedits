@@ -14,7 +14,8 @@ import {
   where,
   orderBy,
   addDoc,
-  writeBatch
+  writeBatch,
+  arrayUnion
 } from 'firebase/firestore';
 import { db } from './firebase';
 import type { Conversation, Message } from './types';
@@ -125,6 +126,7 @@ export async function sendMessage(
         },
         unreadCount: newUnreadCount,
         updatedAt: Date.now(),
+        deletedBy: []
       });
     }
 
@@ -237,34 +239,27 @@ export async function broadcastFromAdmin(
 
 // ── DELETE / CLEAR CONVERSATION ──
 
-export async function clearConversation(conversationId: string): Promise<void> {
+export async function clearConversation(conversationId: string, aliases: string[] = []): Promise<void> {
+  if (!aliases || aliases.length === 0) return;
   try {
-    const messagesRef = collection(db, 'conversations', conversationId, 'messages');
-    const snapshot = await getDocs(messagesRef);
-    const batch = writeBatch(db);
-    snapshot.docs.forEach(doc => batch.delete(doc.ref));
-    
-    batch.update(doc(db, 'conversations', conversationId), {
-      lastMessage: null,
-      unreadCount: {}
-    });
-    
-    await batch.commit();
+    const updates: Record<string, any> = {};
+    const now = Date.now();
+    for (const alias of aliases) {
+      updates[`clearedAt.${alias}`] = now;
+    }
+    await updateDoc(doc(db, 'conversations', conversationId), updates);
   } catch (error) {
     console.error('Error clearing conversation:', error);
     throw error;
   }
 }
 
-export async function deleteConversation(conversationId: string): Promise<void> {
+export async function deleteConversation(conversationId: string, aliases: string[] = []): Promise<void> {
+  if (!aliases || aliases.length === 0) return;
   try {
-    const messagesRef = collection(db, 'conversations', conversationId, 'messages');
-    const snapshot = await getDocs(messagesRef);
-    const batch = writeBatch(db);
-    snapshot.docs.forEach(doc => batch.delete(doc.ref));
-    
-    batch.delete(doc(db, 'conversations', conversationId));
-    await batch.commit();
+    await updateDoc(doc(db, 'conversations', conversationId), {
+      deletedBy: arrayUnion(...aliases)
+    });
   } catch (error) {
     console.error('Error deleting conversation:', error);
     throw error;

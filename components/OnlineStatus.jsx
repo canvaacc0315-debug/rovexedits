@@ -14,7 +14,7 @@ import { onPresenceChange, formatPresenceStatus } from '@/lib/presence';
  *   size — 'sm' | 'md' | 'lg' (default: 'sm')
  *   style — additional styles
  */
-export default function OnlineStatus({ userId, showText = true, size = 'sm', style = {} }) {
+export default function OnlineStatus({ userId, showText = true, size = 'sm', hideIfOffline = false, style = {} }) {
   const [presence, setPresence] = useState(null);
   const [status, setStatus] = useState({ text: 'Offline', color: 'rgba(255,255,255,0.3)', dotColor: 'rgba(255,255,255,0.2)' });
 
@@ -57,6 +57,10 @@ export default function OnlineStatus({ userId, showText = true, size = 'sm', sty
   };
 
   const dotSize = dotSizes[size] || 7;
+
+  if (hideIfOffline && status.text === 'Offline') {
+    return null;
+  }
 
   return (
     <div

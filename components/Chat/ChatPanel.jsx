@@ -28,17 +28,26 @@ export default function ChatPanel() {
   const otherParticipantId = activeConvo?.participants?.find(p => p !== userId && p !== 'admin' && p !== myEditorDocId) || activeChatPartner?.id;
   const otherParticipant = activeConvo?.participantDetails?.[otherParticipantId] || activeChatPartner || {};
 
+  const aliases = [userId];
+  if (isAdmin) aliases.push('admin');
+  if (myEditorDocId) aliases.push(myEditorDocId);
+
+  const myClearedAt = aliases.reduce((max, alias) => {
+    const time = activeConvo?.clearedAt?.[alias] || 0;
+    return time > max ? time : max;
+  }, 0);
+
   const handleClear = async () => {
     if (!activeConversation) return;
     if (confirm('Are you sure you want to clear all messages? This cannot be undone.')) {
-      await clearConversation(activeConversation);
+      await clearConversation(activeConversation, aliases);
     }
   };
 
   const handleDelete = async () => {
     if (!activeConversation) return;
     if (confirm('Are you sure you want to completely delete this conversation?')) {
-      await deleteConversation(activeConversation);
+      await deleteConversation(activeConversation, aliases);
       goBackToList();
     }
   };
@@ -54,7 +63,9 @@ export default function ChatPanel() {
     );
 
     const unsub = onSnapshot(q, (snapshot) => {
-      const msgs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const msgs = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(msg => msg.createdAt > myClearedAt);
       setMessages(msgs);
       setMessagesLoading(false);
 
@@ -67,7 +78,7 @@ export default function ChatPanel() {
     });
 
     return () => unsub();
-  }, [activeConversation, userId]);
+  }, [activeConversation, userId, myClearedAt]);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
