@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowLeft, MessageCircle } from 'lucide-react';
+import { X, ArrowLeft, MessageCircle, Trash2, Eraser } from 'lucide-react';
 import { useChatContext } from './ChatProvider';
 import ConversationList from './ConversationList';
 import MessageBubble from './MessageBubble';
@@ -10,7 +10,7 @@ import ChatInput from './ChatInput';
 import OnlineStatus from '@/components/OnlineStatus';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { markAsRead } from '@/lib/chat';
+import { markAsRead, clearConversation, deleteConversation } from '@/lib/chat';
 
 export default function ChatPanel() {
   const {
@@ -27,6 +27,21 @@ export default function ChatPanel() {
   const activeConvo = conversations.find(c => c.id === activeConversation);
   const otherParticipantId = activeConvo?.participants?.find(p => p !== userId && p !== 'admin' && p !== myEditorDocId) || activeChatPartner?.id;
   const otherParticipant = activeConvo?.participantDetails?.[otherParticipantId] || activeChatPartner || {};
+
+  const handleClear = async () => {
+    if (!activeConversation) return;
+    if (confirm('Are you sure you want to clear all messages? This cannot be undone.')) {
+      await clearConversation(activeConversation);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!activeConversation) return;
+    if (confirm('Are you sure you want to completely delete this conversation?')) {
+      await deleteConversation(activeConversation);
+      goBackToList();
+    }
+  };
 
   // Listen for messages in active conversation
   useEffect(() => {
@@ -194,6 +209,15 @@ export default function ChatPanel() {
                     }}>
                       <OnlineStatus userId={otherParticipantId} size="sm" />
                     </div>
+                  </div>
+
+                  <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
+                    <button onClick={handleClear} className="btn btn-ghost" style={{ padding: 8, color: 'rgba(255,255,255,0.5)' }} title="Clear Chat">
+                      <Eraser size={16} />
+                    </button>
+                    <button onClick={handleDelete} className="btn btn-ghost" style={{ padding: 8, color: '#ff4655' }} title="Delete Chat">
+                      <Trash2 size={16} />
+                    </button>
                   </div>
                 </>
               ) : (

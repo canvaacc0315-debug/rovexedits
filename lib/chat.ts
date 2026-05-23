@@ -14,6 +14,7 @@ import {
   where,
   orderBy,
   addDoc,
+  writeBatch
 } from 'firebase/firestore';
 import { db } from './firebase';
 import type { Conversation, Message } from './types';
@@ -230,6 +231,42 @@ export async function broadcastFromAdmin(
     }
   } catch (error) {
     console.error('Error broadcasting from admin:', error);
+    throw error;
+  }
+}
+
+// ── DELETE / CLEAR CONVERSATION ──
+
+export async function clearConversation(conversationId: string): Promise<void> {
+  try {
+    const messagesRef = collection(db, 'conversations', conversationId, 'messages');
+    const snapshot = await getDocs(messagesRef);
+    const batch = writeBatch(db);
+    snapshot.docs.forEach(doc => batch.delete(doc.ref));
+    
+    batch.update(doc(db, 'conversations', conversationId), {
+      lastMessage: null,
+      unreadCount: {}
+    });
+    
+    await batch.commit();
+  } catch (error) {
+    console.error('Error clearing conversation:', error);
+    throw error;
+  }
+}
+
+export async function deleteConversation(conversationId: string): Promise<void> {
+  try {
+    const messagesRef = collection(db, 'conversations', conversationId, 'messages');
+    const snapshot = await getDocs(messagesRef);
+    const batch = writeBatch(db);
+    snapshot.docs.forEach(doc => batch.delete(doc.ref));
+    
+    batch.delete(doc(db, 'conversations', conversationId));
+    await batch.commit();
+  } catch (error) {
+    console.error('Error deleting conversation:', error);
     throw error;
   }
 }
