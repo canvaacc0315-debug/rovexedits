@@ -107,3 +107,61 @@ export interface AuthPayload {
   slug?: string;
   quotaRemaining?: number;
 }
+
+// ── CHAT SYSTEM ──
+
+export interface Conversation {
+  id: string;
+  participants: string[];           // [clerkUserId, editorFirestoreId]
+  participantDetails: {
+    [id: string]: {
+      name: string;
+      avatar: string | null;
+      role: 'user' | 'editor' | 'admin';
+    };
+  };
+  lastMessage: {
+    text: string;
+    senderId: string;
+    timestamp: number;
+    type: 'text' | 'gif';
+  } | null;
+  unreadCount: { [userId: string]: number };
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface Message {
+  id: string;
+  senderId: string;
+  senderName: string;
+  senderAvatar: string | null;
+  text: string;
+  type: 'text' | 'gif';
+  mediaUrl?: string;
+  createdAt: number;
+  readBy: string[];
+}
+
+// ── PUSH NOTIFICATIONS ──
+
+export interface FCMToken {
+  id: string;
+  userId: string;
+  token: string;
+  platform: 'web-desktop' | 'web-mobile';
+  createdAt: number;
+  lastActive: number;
+}
+
+export interface MarketingMessage {
+  id: string;
+  title: string;
+  body: string;
+  icon?: string;
+  url?: string;
+  active: boolean;
+  sentCount: number;
+  lastSentAt: number | null;
+  createdAt: number;
+}

@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { getAllEdits, incrementDownloads } from '@/lib/db';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Download, X, ArrowDownAZ, ArrowUpZA, Shuffle, SlidersHorizontal, LayoutGrid, Paintbrush, Layers } from 'lucide-react';
+import { Search, Download, X, ArrowDownAZ, ArrowUpZA, Shuffle, SlidersHorizontal, LayoutGrid, Paintbrush, Layers, MessageCircle } from 'lucide-react';
+import ChatButton from '@/components/Chat/ChatButton';
 
 const sortOptions = ['Random', 'Newest', 'A-Z', 'Z-A'];
 const styleOptions = ['All', 'Regular', 'PHP'];
@@ -149,7 +150,9 @@ export default function GalleryPage() {
                     <span style={{ color: 'var(--color-accent)', fontWeight: 600, fontSize: '0.9rem' }}>{edit.editorName}</span>
                     <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                       {edit.editorWhatsapp && (
-                        <a href={`https://wa.me/${edit.editorWhatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="btn btn-wa" onClick={(e) => e.stopPropagation()}>WHATSAPP</a>
+                        <ChatButton editorId={edit.editorId} editorName={edit.editorName} editorAvatar={edit.editorAvatar || null} variant="text" className="btn btn-wa" onClick={(e) => e.stopPropagation()}>
+                          <MessageCircle size={14} /> MESSAGE
+                        </ChatButton>
                       )}
                       {edit.editorAvatar && (
                         <img src={edit.editorAvatar} alt={edit.editorName} style={{ width: 32, height: 32, borderRadius: '50%', border: `2px solid ${edit.tier === 'high-prem' ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)'}`, objectFit: 'cover' }} />

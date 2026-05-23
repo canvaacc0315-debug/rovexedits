@@ -5,6 +5,8 @@ import { Users, Crown, Shield, Award, Star, Store, MessageCircle, Phone, BadgeCh
 import { getAllEditors } from '@/lib/db';
 import Link from 'next/link';
 import RatingModal from '@/components/RatingModal';
+import ChatButton from '@/components/Chat/ChatButton';
+import OnlineStatus from '@/components/OnlineStatus';
 
 export default function EditorsPage() {
   const [editors, setEditors] = useState([]);
@@ -143,6 +145,9 @@ export default function EditorsPage() {
                     {editor.verified && <BadgeCheck size={18} color="#00ffd4" />}
                   </h3>
 
+                  {/* Online Status */}
+                  <OnlineStatus userId={editor.id} size="sm" style={{ marginBottom: 8, justifyContent: 'center' }} />
+
                   <div style={{ display: 'flex', gap: 2, alignItems: 'center', marginBottom: 20 }}>
                     {[1, 2, 3, 4, 5].map(star => {
                       const currentRatingSum = isVaibhav ? adminStats.sum : (editor.ratingSum || 0);
@@ -168,9 +173,7 @@ export default function EditorsPage() {
                     <Link href={`/${editor.slug}`} style={{ aspectRatio: '1/1', background: 'rgba(255,255,255,0.03)', borderRadius: 12, display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid rgba(255,255,255,0.05)', color: 'inherit', textDecoration: 'none', transition: 'all 0.2s', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'} onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}>
                       <Store size={20} color="var(--text-dim)" />
                     </Link>
-                    <a href={`https://wa.me/${editor.socialLinks?.whatsapp || '9769606096'}?text=${encodeURIComponent('I need an edit for my account')}`} target="_blank" rel="noopener noreferrer" style={{ aspectRatio: '1/1', background: 'rgba(255,255,255,0.03)', borderRadius: 12, display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid rgba(255,255,255,0.05)', color: 'inherit', textDecoration: 'none', transition: 'all 0.2s', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'} onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}>
-                      <MessageCircle size={20} color="var(--text-dim)" />
-                    </a>
+                    <ChatButton editorId={editor.id} editorName={editor.name} editorAvatar={editor.avatar || null} />
 
                     {!isVaibhav ? (
                       <button style={{ aspectRatio: '1/1', background: 'rgba(255,255,255,0.03)', borderRadius: 12, display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid rgba(255,255,255,0.05)', color: 'inherit', transition: 'all 0.2s', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'} onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'} onClick={() => setRatingEditor(editor)}>
@@ -182,7 +185,7 @@ export default function EditorsPage() {
                       </Link>
                     )}
 
-                    <a href={`https://wa.me/${editor.socialLinks?.whatsapp || '9769606096'}?text=${encodeURIComponent('I need an edit for my account')}`} target="_blank" rel="noopener noreferrer" style={{ aspectRatio: '1/1', background: 'rgba(255,255,255,0.03)', borderRadius: 12, display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid rgba(255,255,255,0.05)', color: 'inherit', textDecoration: 'none', transition: 'all 0.2s', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'} onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}>
+                    <a href={`https://wa.me/${editor.socialLinks?.whatsapp || '9769606096'}`} target="_blank" rel="noopener noreferrer" style={{ aspectRatio: '1/1', background: 'rgba(255,255,255,0.03)', borderRadius: 12, display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid rgba(255,255,255,0.05)', color: 'inherit', textDecoration: 'none', transition: 'all 0.2s', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'} onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}>
                       <Phone size={20} color="var(--text-dim)" />
                     </a>
                   </div>

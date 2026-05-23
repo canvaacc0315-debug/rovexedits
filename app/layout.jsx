@@ -3,6 +3,9 @@ import "./globals.css";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollProgress from '@/components/ScrollProgress';
+import ChatProvider from '@/components/Chat/ChatProvider';
+import ChatPanel from '@/components/Chat/ChatPanel';
+import NotificationProvider from '@/components/Notifications/NotificationProvider';
 
 export const metadata = {
   title: "RovexEdits — Premium Valorant Edits",
@@ -23,10 +26,15 @@ export default function RootLayout({ children }) {
           <link rel="apple-touch-icon" href="/logo.png" />
         </head>
         <body>
-          <ScrollProgress />
-          <Navbar />
-          <main style={{ minHeight: '100vh' }}>{children}</main>
-          <Footer />
+          <NotificationProvider>
+            <ChatProvider>
+              <ScrollProgress />
+              <Navbar />
+              <main style={{ minHeight: '100vh' }}>{children}</main>
+              <Footer />
+              <ChatPanel />
+            </ChatProvider>
+          </NotificationProvider>
         </body>
       </html>
     </ClerkProvider>

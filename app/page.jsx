@@ -8,6 +8,7 @@ import { Palette, ArrowRight, Shield, Zap, CheckCircle, Sparkles, Download, X, C
 import CountUp from '@/components/CountUp';
 import TiltCard from '@/components/TiltCard';
 import InfiniteMarquee from '@/components/InfiniteMarquee';
+import ChatButton from '@/components/Chat/ChatButton';
 export default function HomePage() {
   const [featuredEdits, setFeaturedEdits] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -194,7 +195,9 @@ export default function HomePage() {
                             <span style={{ color: 'var(--color-accent)', fontWeight: 600, fontSize: '0.9rem' }}>{edit.editorName}</span>
                             <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                               {edit.editorWhatsapp && (
-                                <a href={`https://wa.me/${edit.editorWhatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="btn btn-wa" onClick={(e) => e.stopPropagation()}>WHATSAPP</a>
+                                <ChatButton editorId={edit.editorId} editorName={edit.editorName} editorAvatar={edit.editorAvatar || null} variant="text" className="btn btn-wa" onClick={(e) => e.stopPropagation()}>
+                                  MESSAGE
+                                </ChatButton>
                               )}
                               {edit.editorAvatar && (
                                 <img src={edit.editorAvatar} alt={edit.editorName} style={{ width: 32, height: 32, borderRadius: '50%', border: `2px solid ${edit.tier === 'high-prem' ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)'}`, objectFit: 'cover' }} />

@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowLeft, MessageCircle, AtSign, Gamepad2, Play, Download, X, Image as ImageIcon, Users, CircleDot, Star, BadgeCheck } from 'lucide-react';
 import RatingModal from '@/components/RatingModal';
+import ChatButton from '@/components/Chat/ChatButton';
+import OnlineStatus from '@/components/OnlineStatus';
 
 export default function EditorProfilePage() {
   const params = useParams();
@@ -116,6 +118,9 @@ export default function EditorProfilePage() {
             {editor.verified && <BadgeCheck size={28} color="#00ffd4" style={{ flexShrink: 0 }} />}
           </h1>
 
+          {/* Online Status */}
+          <OnlineStatus userId={editor.id} size="md" style={{ marginBottom: 10, justifyContent: 'center' }} />
+
           {/* Rating */}
           <div style={{ display: 'flex', gap: 2, alignItems: 'center', marginBottom: 12 }}>
             {[1, 2, 3, 4, 5].map(star => {
@@ -165,10 +170,7 @@ export default function EditorProfilePage() {
           {/* Social Links */}
           <div style={{ display: 'flex', gap: 8, marginTop: 18, flexWrap: 'wrap', justifyContent: 'center' }}>
             {editor.socialLinks?.whatsapp && (
-              <a href={`https://wa.me/${editor.socialLinks.whatsapp}`} target="_blank" rel="noopener noreferrer" className="btn btn-ghost"
-                style={{ borderColor: 'rgba(37,211,102,0.25)', color: '#25d366', display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem' }}>
-                <MessageCircle size={14} /> WhatsApp
-              </a>
+              <ChatButton editorId={editor.id} editorName={editor.name} editorAvatar={editor.avatar || null} variant="social" />
             )}
             {editor.socialLinks?.instagram && (
               <a href={`https://instagram.com/${editor.socialLinks.instagram}`} target="_blank" rel="noopener noreferrer" className="btn btn-ghost"
@@ -239,7 +241,9 @@ export default function EditorProfilePage() {
                     <span style={{ color: 'var(--color-accent)', fontWeight: 600, fontSize: '0.9rem' }}>{edit.editorName}</span>
                     <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                       {edit.editorWhatsapp && (
-                        <a href={`https://wa.me/${edit.editorWhatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="btn btn-wa" onClick={(e) => e.stopPropagation()}>WHATSAPP</a>
+                        <ChatButton editorId={editor.id} editorName={editor.name} editorAvatar={editor.avatar || null} variant="text" className="btn btn-wa" style={{}} onClick={(e) => e.stopPropagation()}>
+                          <MessageCircle size={14} /> MESSAGE
+                        </ChatButton>
                       )}
                       {edit.editorAvatar && (
                         <img src={edit.editorAvatar} alt={edit.editorName} style={{ width: 32, height: 32, borderRadius: '50%', border: `2px solid ${edit.tier === 'high-prem' ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)'}`, objectFit: 'cover' }} />

@@ -6,6 +6,7 @@ import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, LayoutDashboard, LogIn } from 'lucide-react';
+import NotificationBell from '@/components/Notifications/NotificationBell';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -85,6 +86,7 @@ export default function Navbar() {
                 <div className="desktop-nav">
                   {isSignedIn ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <NotificationBell />
                       <Link href="/editor-dashboard" className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: 'rgba(255,70,85,0.08)', color: '#ff4655', borderRadius: 9999, fontSize: '0.82rem', fontWeight: 500, border: '1px solid rgba(255,70,85,0.15)', textDecoration: 'none' }}>
                         <LayoutDashboard size={14} /> Dashboard
                       </Link>
@@ -127,6 +129,7 @@ export default function Navbar() {
             <div style={{ padding: '12px 24px', borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 4 }}>
               {isSignedIn ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <NotificationBell />
                   <Link href="/editor-dashboard" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#ff4655', fontSize: '0.85rem', textDecoration: 'none' }}>
                     <LayoutDashboard size={14} /> Dashboard
                   </Link>
