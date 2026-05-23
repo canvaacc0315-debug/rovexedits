@@ -30,7 +30,7 @@ export default function ChatProvider({ children }) {
   usePresenceTracker();
 
   const userId = user?.id;
-  const userEmail = user?.primaryEmailAddress?.emailAddress;
+  const userEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
   const userName = user?.fullName || user?.firstName || 'User';
   const userAvatar = user?.imageUrl || null;
   const isAdmin = userEmail === 'vaibhavpatilpro@gmail.com';
