@@ -83,7 +83,7 @@ export async function sendMessage(
   text: string,
   type: 'text' | 'gif' = 'text',
   mediaUrl?: string,
-  isAdmin?: boolean
+  senderAliases: string[] = []
 ): Promise<string> {
   try {
     const messagesRef = collection(db, 'conversations', conversationId, 'messages');
@@ -108,9 +108,9 @@ export async function sendMessage(
       const convData = convSnap.data() as Conversation;
       const newUnreadCount = { ...convData.unreadCount };
 
-      // Increment unread count for all participants except the sender
+      // Increment unread count for all participants except the sender and their aliases
       for (const participantId of convData.participants) {
-        if (participantId !== senderId && !(isAdmin && participantId === 'admin')) {
+        if (participantId !== senderId && !senderAliases.includes(participantId)) {
           newUnreadCount[participantId] = (newUnreadCount[participantId] || 0) + 1;
         }
       }

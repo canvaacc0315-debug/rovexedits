@@ -65,7 +65,7 @@ export default function ChatProvider({ children }) {
 
     const queries = [];
     
-    // Normal query for user's actual ID
+    // Normal query for user's actual Clerk ID
     queries.push(query(
       collection(db, 'conversations'),
       where('participants', 'array-contains', userId),
@@ -77,6 +77,15 @@ export default function ChatProvider({ children }) {
       queries.push(query(
         collection(db, 'conversations'),
         where('participants', 'array-contains', 'admin'),
+        orderBy('updatedAt', 'desc')
+      ));
+    }
+
+    // Editor query for their editor profile ID
+    if (myEditorDocId && myEditorDocId !== 'admin') {
+      queries.push(query(
+        collection(db, 'conversations'),
+        where('participants', 'array-contains', myEditorDocId),
         orderBy('updatedAt', 'desc')
       ));
     }
@@ -105,13 +114,14 @@ export default function ChatProvider({ children }) {
     return () => {
       unsubs.forEach(u => u());
     };
-  }, [isSignedIn, userId, isAdmin]);
+  }, [isSignedIn, userId, isAdmin, myEditorDocId]);
 
   // Calculate total unread
   const totalUnread = conversations.reduce((sum, c) => {
     const userUnread = c.unreadCount?.[userId] || 0;
     const adminUnread = isAdmin ? (c.unreadCount?.['admin'] || 0) : 0;
-    return sum + userUnread + adminUnread;
+    const editorUnread = (myEditorDocId && myEditorDocId !== 'admin') ? (c.unreadCount?.[myEditorDocId] || 0) : 0;
+    return sum + userUnread + adminUnread + editorUnread;
   }, 0);
 
   // Open chat with a specific editor
@@ -160,11 +170,12 @@ export default function ChatProvider({ children }) {
     setActiveConversation(conversationId);
     if (userId) {
       try { 
-        await markAsRead(conversationId, userId); 
+        await markAsRead(conversationId, userId);
         if (isAdmin) await markAsRead(conversationId, 'admin');
+        if (myEditorDocId && myEditorDocId !== 'admin') await markAsRead(conversationId, myEditorDocId);
       } catch {}
     }
-  }, [userId, isAdmin]);
+  }, [userId, isAdmin, myEditorDocId]);
 
   // Go back to list
   const goBackToList = useCallback(() => {

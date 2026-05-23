@@ -8,7 +8,7 @@ import { sendNotificationViaAPI } from '@/lib/notifications';
 import GifPicker from './GifPicker';
 
 export default function ChatInput({ conversationId }) {
-  const { userId, userName, userAvatar, conversations, isAdmin } = useChatContext();
+  const { userId, userName, userAvatar, conversations, isAdmin, myEditorDocId } = useChatContext();
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const [showGifPicker, setShowGifPicker] = useState(false);
@@ -16,7 +16,12 @@ export default function ChatInput({ conversationId }) {
 
   // Get the other participant for notification
   const convo = conversations.find(c => c.id === conversationId);
-  const otherParticipantId = convo?.participants?.find(p => p !== userId && p !== 'admin');
+  const otherParticipantId = convo?.participants?.find(p => p !== userId && p !== 'admin' && p !== myEditorDocId);
+
+  // Prepare sender aliases to prevent incrementing our own unread counts
+  const senderAliases = [];
+  if (isAdmin) senderAliases.push('admin');
+  if (myEditorDocId) senderAliases.push(myEditorDocId);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -35,7 +40,7 @@ export default function ChatInput({ conversationId }) {
     setSending(true);
 
     try {
-      await sendMessage(conversationId, userId, userName, userAvatar, msgText, 'text', undefined, isAdmin);
+      await sendMessage(conversationId, userId, userName, userAvatar, msgText, 'text', undefined, senderAliases);
 
       // Send push notification to other participant
       if (otherParticipantId) {
@@ -60,7 +65,7 @@ export default function ChatInput({ conversationId }) {
     setShowGifPicker(false);
 
     try {
-      await sendMessage(conversationId, userId, userName, userAvatar, '🎞️ GIF', 'gif', gifUrl, isAdmin);
+      await sendMessage(conversationId, userId, userName, userAvatar, '🎞️ GIF', 'gif', gifUrl, senderAliases);
 
       if (otherParticipantId) {
         sendNotificationViaAPI(
