@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { getEditorBySlug, getEditsByEditor, incrementDownloads } from '@/lib/db';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowLeft, MessageCircle, AtSign, Gamepad2, Play, Download, X, Image as ImageIcon, Users, CircleDot, Star, BadgeCheck } from 'lucide-react';
+import { ArrowLeft, MessageCircle, AtSign, Gamepad2, Play, Download, X, Image as ImageIcon, Users, CircleDot, Star, BadgeCheck, Phone } from 'lucide-react';
 import RatingModal from '@/components/RatingModal';
 import ChatButton from '@/components/Chat/ChatButton';
 import OnlineStatus from '@/components/OnlineStatus';

@@ -12,9 +12,9 @@ export default function ChatInput({ conversationId }) {
   const [sending, setSending] = useState(false);
   const textareaRef = useRef(null);
 
-  // Get the other participant for notification
+
+  // Get the conversation for notification
   const convo = conversations.find(c => c.id === conversationId);
-  const otherParticipantId = convo?.participants?.find(p => p !== userId && p !== 'admin' && p !== myEditorDocId);
 
   // Prepare sender aliases to prevent incrementing our own unread counts
   const senderAliases = [];
@@ -40,14 +40,22 @@ export default function ChatInput({ conversationId }) {
     try {
       await sendMessage(conversationId, userId, userName, userAvatar, msgText, 'text', undefined, senderAliases);
 
-      // Send push notification to other participant
-      if (otherParticipantId) {
-        sendNotificationViaAPI(
-          otherParticipantId,
-          `${userName}`,
-          msgText.length > 80 ? msgText.slice(0, 80) + '...' : msgText,
-          { conversationId, url: '/' }
-        ).catch(() => {}); // fire and forget
+      // Send push notification to other participants
+      // Try all participant IDs that aren't ours (they could be Clerk IDs or editor doc IDs)
+      if (convo?.participants) {
+        const myAliases = [userId];
+        if (isAdmin) myAliases.push('admin');
+        if (myEditorDocId) myAliases.push(myEditorDocId);
+        
+        const otherIds = convo.participants.filter(p => !myAliases.includes(p));
+        for (const targetId of otherIds) {
+          sendNotificationViaAPI(
+            targetId,
+            `${userName}`,
+            msgText.length > 80 ? msgText.slice(0, 80) + '...' : msgText,
+            { conversationId, url: '/' }
+          ).catch(() => {}); // fire and forget
+        }
       }
     } catch (err) {
       console.error('Failed to send message:', err);

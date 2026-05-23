@@ -15,7 +15,8 @@ import {
   orderBy,
   addDoc,
   writeBatch,
-  arrayUnion
+  arrayUnion,
+  arrayRemove
 } from 'firebase/firestore';
 import { db } from './firebase';
 import type { Conversation, Message } from './types';
@@ -26,21 +27,30 @@ export async function getOrCreateConversation(
   userId: string,
   editorId: string,
   userDetails: { name: string; avatar: string | null; role: 'user' | 'admin' },
-  editorDetails: { name: string; avatar: string | null }
+  editorDetails: { name: string; avatar: string | null },
+  callerAliases: string[] = [],
+  targetAliases: string[] = []
 ): Promise<Conversation> {
   try {
-    // Query for existing conversation with both participants
-    const q = query(
-      collection(db, 'conversations'),
-      where('participants', 'array-contains', userId)
-    );
-    const snapshot = await getDocs(q);
+    // Build full alias sets (include the primary IDs)
+    const allCallerIds = [userId, ...callerAliases].filter((v, i, a) => v && a.indexOf(v) === i);
+    const allTargetIds = [editorId, ...targetAliases].filter((v, i, a) => v && a.indexOf(v) === i);
 
-    // Find a conversation that also contains the editorId
-    for (const docSnap of snapshot.docs) {
-      const data = docSnap.data();
-      if (data.participants.includes(editorId)) {
-        return { id: docSnap.id, ...data } as Conversation;
+    // Query for conversations containing any of the caller's IDs
+    for (const callerId of allCallerIds) {
+      const q = query(
+        collection(db, 'conversations'),
+        where('participants', 'array-contains', callerId)
+      );
+      const snapshot = await getDocs(q);
+
+      for (const docSnap of snapshot.docs) {
+        const data = docSnap.data();
+        // Check if any target alias is also a participant
+        const hasTarget = allTargetIds.some(tid => data.participants.includes(tid));
+        if (hasTarget) {
+          return { id: docSnap.id, ...data } as Conversation;
+        }
       }
     }
 
@@ -126,7 +136,6 @@ export async function sendMessage(
         },
         unreadCount: newUnreadCount,
         updatedAt: Date.now(),
-        deletedBy: []
       });
     }
 
@@ -139,7 +148,7 @@ export async function sendMessage(
 
 // ── MARK AS READ ──
 
-export async function markAsRead(conversationId: string, userId: string): Promise<void> {
+export async function markAsRead(conversationId: string, userId: string, aliases: string[] = []): Promise<void> {
   try {
     const convRef = doc(db, 'conversations', conversationId);
     const convSnap = await getDoc(convRef);
@@ -147,9 +156,35 @@ export async function markAsRead(conversationId: string, userId: string): Promis
     if (convSnap.exists()) {
       const convData = convSnap.data() as Conversation;
       const newUnreadCount = { ...convData.unreadCount };
-      newUnreadCount[userId] = 0;
+      
+      // Reset unread for the user and all their aliases
+      const allIds = [userId, ...aliases].filter(Boolean);
+      for (const id of allIds) {
+        if (id in newUnreadCount) {
+          newUnreadCount[id] = 0;
+        }
+      }
 
       await updateDoc(convRef, { unreadCount: newUnreadCount });
+
+      // Also update readBy on recent messages
+      const messagesRef = collection(db, 'conversations', conversationId, 'messages');
+      const msgQuery = query(messagesRef, orderBy('createdAt', 'desc'));
+      const msgSnap = await getDocs(msgQuery);
+      
+      const batch = writeBatch(db);
+      let batchCount = 0;
+      for (const msgDoc of msgSnap.docs) {
+        const msgData = msgDoc.data();
+        if (!msgData.readBy?.includes(userId)) {
+          batch.update(msgDoc.ref, { readBy: arrayUnion(userId) });
+          batchCount++;
+        }
+        if (batchCount >= 20) break; // Limit batch size
+      }
+      if (batchCount > 0) {
+        await batch.commit();
+      }
     }
   } catch (error) {
     console.error('Error marking as read:', error);

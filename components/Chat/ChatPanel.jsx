@@ -78,7 +78,7 @@ export default function ChatPanel() {
     });
 
     return () => unsub();
-  }, [activeConversation, userId, myClearedAt]);
+  }, [activeConversation, userId, myClearedAt, isAdmin, myEditorDocId]);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -366,13 +366,18 @@ export default function ChatPanel() {
                           </p>
                         </div>
                       ) : (
-                        messages.map((msg) => (
-                          <MessageBubble
-                            key={msg.id}
-                            message={msg}
-                            isOwn={msg.senderId === userId}
-                          />
-                        ))
+                        messages.map((msg) => {
+                          const myAliases = [userId];
+                          if (isAdmin) myAliases.push('admin');
+                          if (myEditorDocId) myAliases.push(myEditorDocId);
+                          return (
+                            <MessageBubble
+                              key={msg.id}
+                              message={msg}
+                              isOwn={myAliases.includes(msg.senderId)}
+                            />
+                          );
+                        })
                       )}
                       <div ref={messagesEndRef} />
                     </div>

@@ -76,11 +76,11 @@ export default function ChatProvider({ children }) {
     
     const checkEditor = async () => {
       try {
-        const { getEditorByClerkId, getEditors } = await import('@/lib/db');
+        const { getEditorByClerkId, getAllEditors } = await import('@/lib/db');
         let editor = await getEditorByClerkId(userId);
 
         if (!editor && isAdmin) {
-           const allEditors = await getEditors();
+           const allEditors = await getAllEditors();
            editor = allEditors.find(e => e.isAdmin || e.email === 'vaibhavpatilpro@gmail.com' || e.name?.toLowerCase() === 'vaibhav' || e.name?.toLowerCase() === 'va1bhav');
         }
 
@@ -134,18 +134,22 @@ export default function ChatProvider({ children }) {
     }
 
     const unsubs = [];
-    const convosMap = new Map();
+    // Track docs per query source to properly handle removals
+    const docsPerSource = new Map(); // source index -> Set of doc IDs
 
-    const handleSnapshot = (snapshot) => {
-      snapshot.docs.forEach(doc => {
-        convosMap.set(doc.id, { id: doc.id, ...doc.data() });
-      });
-      
-      let sortedConvos = Array.from(convosMap.values()).sort((a, b) => b.updatedAt - a.updatedAt);
-      
+    const rebuildConversations = () => {
+      const merged = new Map();
+      for (const [, docMap] of docsPerSource) {
+        for (const [id, data] of docMap) {
+          merged.set(id, data);
+        }
+      }
+
       const aliases = [userId];
       if (isAdmin) aliases.push('admin');
       if (myEditorDocId) aliases.push(myEditorDocId);
+
+      let sortedConvos = Array.from(merged.values()).sort((a, b) => b.updatedAt - a.updatedAt);
 
       sortedConvos = sortedConvos.filter(convo => {
         if (!convo.deletedBy || convo.deletedBy.length === 0) return true;
@@ -159,8 +163,16 @@ export default function ChatProvider({ children }) {
       setLoading(false);
     };
 
-    queries.forEach(q => {
-      const unsub = onSnapshot(q, handleSnapshot, (error) => {
+    queries.forEach((q, index) => {
+      docsPerSource.set(index, new Map());
+      const unsub = onSnapshot(q, (snapshot) => {
+        const sourceMap = new Map();
+        snapshot.docs.forEach(doc => {
+          sourceMap.set(doc.id, { id: doc.id, ...doc.data() });
+        });
+        docsPerSource.set(index, sourceMap);
+        rebuildConversations();
+      }, (error) => {
         console.error('Chat listener error:', error);
         setLoading(false);
       });
@@ -185,10 +197,16 @@ export default function ChatProvider({ children }) {
     const latestConvo = conversations[0];
     if (!latestConvo) return;
 
-    if (lastUpdateRef.current && latestConvo.updatedAt > lastUpdateRef.current) {
+    const currentUpdate = latestConvo.updatedAt;
+    if (lastUpdateRef.current && currentUpdate > lastUpdateRef.current) {
       const msg = latestConvo.lastMessage;
-      // Ensure we didn't send it ourselves
-      if (msg && msg.senderId !== userId && msg.senderId !== myEditorDocId && msg.senderId !== 'admin') {
+      // Build all my aliases to check against
+      const myAliases = [userId];
+      if (myEditorDocId) myAliases.push(myEditorDocId);
+      if (isAdmin) myAliases.push('admin');
+      
+      // Ensure we didn't send it ourselves (check all aliases)
+      if (msg && !myAliases.includes(msg.senderId)) {
         playNotificationSound();
         const sender = latestConvo.participantDetails?.[msg.senderId];
         setToast({
@@ -201,7 +219,7 @@ export default function ChatProvider({ children }) {
       }
     }
     
-    lastUpdateRef.current = latestConvo.updatedAt;
+    lastUpdateRef.current = currentUpdate;
   }, [conversations, userId, myEditorDocId, isAdmin]);
 
   // Open chat with a specific editor
@@ -214,8 +232,13 @@ export default function ChatProvider({ children }) {
       role: isEditorUser ? 'editor' : 'user',
     };
 
+    // Build caller aliases for dedup
+    const callerAliases = [];
+    if (isAdmin) callerAliases.push('admin');
+    if (myEditorDocId) callerAliases.push(myEditorDocId);
+
     try {
-      const conversation = await getOrCreateConversation(userId, editorId, userDetails, editorDetails);
+      const conversation = await getOrCreateConversation(userId, editorId, userDetails, editorDetails, callerAliases);
       setActiveChatPartner({
         id: editorId,
         name: editorDetails.name,
@@ -225,13 +248,14 @@ export default function ChatProvider({ children }) {
       setActiveConversation(conversation.id);
       setIsChatOpen(true);
 
-      // Mark as read
-      await markAsRead(conversation.id, userId);
-      if (isAdmin) await markAsRead(conversation.id, 'admin');
+      // Mark as read for all aliases
+      const allAliases = isAdmin ? ['admin'] : [];
+      if (myEditorDocId && myEditorDocId !== 'admin') allAliases.push(myEditorDocId);
+      await markAsRead(conversation.id, userId, allAliases);
     } catch (err) {
       console.error('Error opening chat:', err);
     }
-  }, [userId, userName, userAvatar, isEditorUser]);
+  }, [userId, userName, userAvatar, isEditorUser, isAdmin, myEditorDocId]);
 
   // Open to conversation list
   const openChatPanel = useCallback(() => {
@@ -249,10 +273,11 @@ export default function ChatProvider({ children }) {
   const selectConversation = useCallback(async (conversationId) => {
     setActiveConversation(conversationId);
     if (userId) {
-      try { 
-        await markAsRead(conversationId, userId);
-        if (isAdmin) await markAsRead(conversationId, 'admin');
-        if (myEditorDocId && myEditorDocId !== 'admin') await markAsRead(conversationId, myEditorDocId);
+      try {
+        const allAliases = [];
+        if (isAdmin) allAliases.push('admin');
+        if (myEditorDocId && myEditorDocId !== 'admin') allAliases.push(myEditorDocId);
+        await markAsRead(conversationId, userId, allAliases);
       } catch {}
     }
   }, [userId, isAdmin, myEditorDocId]);
