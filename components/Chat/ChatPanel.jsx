@@ -15,7 +15,7 @@ import { markAsRead } from '@/lib/chat';
 export default function ChatPanel() {
   const {
     isChatOpen, closeChat, activeConversation, goBackToList,
-    conversations, userId
+    conversations, userId, activeChatPartner
   } = useChatContext();
 
   const [messages, setMessages] = useState([]);
@@ -25,8 +25,8 @@ export default function ChatPanel() {
 
   // Get active conversation details
   const activeConvo = conversations.find(c => c.id === activeConversation);
-  const otherParticipantId = activeConvo?.participants?.find(p => p !== userId);
-  const otherParticipant = activeConvo?.participantDetails?.[otherParticipantId] || {};
+  const otherParticipantId = activeConvo?.participants?.find(p => p !== userId) || activeChatPartner?.id;
+  const otherParticipant = activeConvo?.participantDetails?.[otherParticipantId] || activeChatPartner || {};
 
   // Listen for messages in active conversation
   useEffect(() => {

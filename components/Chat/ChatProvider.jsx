@@ -19,6 +19,7 @@ export default function ChatProvider({ children }) {
   const { user, isSignedIn } = useUser();
   const [conversations, setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
+  const [activeChatPartner, setActiveChatPartner] = useState(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isEditorUser, setIsEditorUser] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -96,6 +97,12 @@ export default function ChatProvider({ children }) {
 
     try {
       const conversation = await getOrCreateConversation(userId, editorId, userDetails, editorDetails);
+      setActiveChatPartner({
+        id: editorId,
+        name: editorDetails.name,
+        avatar: editorDetails.avatar,
+        role: 'editor',
+      });
       setActiveConversation(conversation.id);
       setIsChatOpen(true);
 
@@ -129,6 +136,7 @@ export default function ChatProvider({ children }) {
   // Go back to list
   const goBackToList = useCallback(() => {
     setActiveConversation(null);
+    setActiveChatPartner(null);
   }, []);
 
   const value = {
@@ -146,6 +154,7 @@ export default function ChatProvider({ children }) {
     closeChat,
     selectConversation,
     goBackToList,
+    activeChatPartner,
   };
 
   return (
