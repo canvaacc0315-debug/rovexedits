@@ -31,5 +31,5 @@ export default function CountUp({ to, duration = 2, suffix = '' }) {
     });
   }, [springValue, to]);
 
-  return <span ref={ref}>{displayValue}{suffix}</span>;
+  return <span ref={ref}>{displayValue}{suffix}</span>; //fuck
 }
