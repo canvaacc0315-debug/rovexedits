@@ -7,10 +7,11 @@ import { useChatContext } from './ChatProvider';
 
 export default function ChatButton({ editorId, editorName, editorAvatar, className, style, children, variant = 'icon' }) {
   const { isSignedIn } = useUser();
-  const { openChat, myEditorDocId } = useChatContext();
+  const { openChat, myEditorDocId, isAdmin } = useChatContext();
 
   // Hide button if this is the user's own editor profile
-  if (myEditorDocId && editorId === myEditorDocId) {
+  const isSelfEditor = (myEditorDocId && editorId === myEditorDocId) || (isAdmin && editorId === 'admin');
+  if (isSelfEditor) {
     return null;
   }
 
