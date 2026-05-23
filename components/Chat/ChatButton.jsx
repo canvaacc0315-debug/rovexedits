@@ -93,26 +93,25 @@ export default function ChatButton({ editorId, editorName, editorAvatar, classNa
   }
 
   // Default icon variant (for editor card grid)
-  return (
-    <button
-      onClick={handleClick}
-      style={{
-        aspectRatio: '1/1',
-        background: 'rgba(255,255,255,0.03)',
-        borderRadius: 12,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        border: '1px solid rgba(255,255,255,0.05)',
-        color: 'inherit',
-        transition: 'all 0.2s',
-        cursor: 'pointer',
-        ...style,
-      }}
-      onMouseOver={e => e.currentTarget.style.background = 'rgba(255, 70, 85, 0.1)'}
-      onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
-    >
-      <MessageCircle size={20} color="#ff4655" />
-    </button>
-  );
+  return <button
+        className={className}
+        style={{
+          aspectRatio: '1/1',
+          background: 'rgba(255,255,255,0.03)',
+          borderRadius: 12,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          border: '1px solid rgba(255,255,255,0.05)',
+          color: 'inherit',
+          transition: 'all 0.2s',
+          cursor: 'pointer',
+          ...style,
+        }}
+        onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+        onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
+        onClick={handleClick}
+      >
+        <MessageCircle size={20} color="var(--text-dim)" />
+      </button>;
 }

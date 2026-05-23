@@ -170,7 +170,10 @@ export default function EditorProfilePage() {
           {/* Social Links */}
           <div style={{ display: 'flex', gap: 8, marginTop: 18, flexWrap: 'wrap', justifyContent: 'center' }}>
             {editor.socialLinks?.whatsapp && (
-              <ChatButton editorId={editor.id} editorName={editor.name} editorAvatar={editor.avatar || null} variant="social" />
+              <a href={`https://wa.me/${editor.socialLinks.whatsapp}`} target="_blank" rel="noopener noreferrer" className="btn btn-ghost"
+                style={{ borderColor: 'rgba(37,211,102,0.25)', color: '#25d366', display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem' }}>
+                <Phone size={14} /> WhatsApp
+              </a>
             )}
             {editor.socialLinks?.instagram && (
               <a href={`https://instagram.com/${editor.socialLinks.instagram}`} target="_blank" rel="noopener noreferrer" className="btn btn-ghost"
