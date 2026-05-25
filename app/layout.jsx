@@ -38,15 +38,15 @@ export default function RootLayout({ children }) {
           )}
         </head>
         <body>
-          <NotificationProvider>
-            <ChatProvider>
+          <ChatProvider>
+            <NotificationProvider>
               <ScrollProgress />
               <Navbar />
               <main style={{ minHeight: '100vh' }}>{children}</main>
               <Footer />
               <ChatPanel />
-            </ChatProvider>
-          </NotificationProvider>
+            </NotificationProvider>
+          </ChatProvider>
         </body>
       </html>
     </ClerkProvider>

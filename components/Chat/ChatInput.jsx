@@ -7,7 +7,7 @@ import { sendMessage } from '@/lib/chat';
 import { sendNotificationViaAPI } from '@/lib/notifications';
 
 export default function ChatInput({ conversationId }) {
-  const { userId, userName, userAvatar, conversations, isAdmin, myEditorDocId } = useChatContext();
+  const { userId, userName, userAvatar, conversations, isAdmin, myEditorDocId, activeChatPartner } = useChatContext();
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const textareaRef = useRef(null);
@@ -41,21 +41,24 @@ export default function ChatInput({ conversationId }) {
       await sendMessage(conversationId, userId, userName, userAvatar, msgText, 'text', undefined, senderAliases);
 
       // Send push notification to other participants
-      // Try all participant IDs that aren't ours (they could be Clerk IDs or editor doc IDs)
+      const myAliases = [userId];
+      if (isAdmin) myAliases.push('admin');
+      if (myEditorDocId) myAliases.push(myEditorDocId);
+      
+      let otherIds = [];
       if (convo?.participants) {
-        const myAliases = [userId];
-        if (isAdmin) myAliases.push('admin');
-        if (myEditorDocId) myAliases.push(myEditorDocId);
-        
-        const otherIds = convo.participants.filter(p => !myAliases.includes(p));
-        for (const targetId of otherIds) {
-          sendNotificationViaAPI(
-            targetId,
-            `${userName}`,
-            msgText.length > 80 ? msgText.slice(0, 80) + '...' : msgText,
-            { conversationId, url: '/' }
-          ).catch(() => {}); // fire and forget
-        }
+        otherIds = convo.participants.filter(p => !myAliases.includes(p));
+      } else if (activeChatPartner?.id && !myAliases.includes(activeChatPartner.id)) {
+        otherIds = [activeChatPartner.id];
+      }
+
+      for (const targetId of otherIds) {
+        sendNotificationViaAPI(
+          targetId,
+          `${userName}`,
+          msgText.length > 80 ? msgText.slice(0, 80) + '...' : msgText,
+          { conversationId, url: '/' }
+        ).catch(() => {}); // fire and forget
       }
     } catch (err) {
       console.error('Failed to send message:', err);

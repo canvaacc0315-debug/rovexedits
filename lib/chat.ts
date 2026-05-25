@@ -127,6 +127,14 @@ export async function sendMessage(
         }
       }
 
+      // Explicitly clear unread count for sender
+      const allSenderIds = [senderId, ...senderAliases].filter(Boolean);
+      for (const id of allSenderIds) {
+        if (id in newUnreadCount) {
+          newUnreadCount[id] = 0;
+        }
+      }
+
       await updateDoc(convRef, {
         lastMessage: {
           text,
@@ -136,6 +144,7 @@ export async function sendMessage(
         },
         unreadCount: newUnreadCount,
         updatedAt: Date.now(),
+        deletedBy: [], // Reset deletedBy so it reappears for everyone
       });
     }
 

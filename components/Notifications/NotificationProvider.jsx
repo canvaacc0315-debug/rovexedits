@@ -9,14 +9,19 @@ import {
   getFCMToken,
   saveFCMToken,
 } from '@/lib/notifications';
+import { useChatContext } from '@/components/Chat/ChatProvider';
 
 export default function NotificationProvider({ children }) {
   const { user, isSignedIn } = useUser();
+  const { isAdmin, myEditorDocId } = useChatContext();
   const initializedRef = useRef(false);
 
   useEffect(() => {
     if (!isSignedIn || !user?.id || initializedRef.current) return;
     if (typeof window === 'undefined') return;
+
+    // We only want to init once, but if isAdmin or myEditorDocId changes, we might need to update tokens.
+    // However, saving them multiple times is idempotent, so we can just run this when they become available.
 
     const init = async () => {
       try {
@@ -29,21 +34,23 @@ export default function NotificationProvider({ children }) {
           );
           // Wait for the service worker to be ready
           await navigator.serviceWorker.ready;
-          console.log('[Notifications] Service worker registered');
         }
 
         // Request permission
         const permission = await requestNotificationPermission();
         if (permission !== 'granted') {
-          console.log('[Notifications] Permission not granted');
           return;
         }
 
         // Get and save FCM token
         const token = await getFCMToken();
         if (token) {
+          // Save for base Clerk ID
           await saveFCMToken(user.id, token);
-          console.log('[Notifications] FCM token saved');
+          // Save for admin alias if applicable
+          if (isAdmin) await saveFCMToken('admin', token);
+          // Save for editor doc ID if applicable
+          if (myEditorDocId && myEditorDocId !== 'admin') await saveFCMToken(myEditorDocId, token);
         }
 
         initializedRef.current = true;
@@ -53,7 +60,7 @@ export default function NotificationProvider({ children }) {
     };
 
     init();
-  }, [isSignedIn, user?.id]);
+  }, [isSignedIn, user?.id, isAdmin, myEditorDocId]);
 
   // Listen for foreground messages
   useEffect(() => {
