@@ -119,8 +119,7 @@ export default function EditorProfilePage() {
             {editor.verified && <BadgeCheck size={28} color="#00ffd4" style={{ flexShrink: 0 }} />}
           </h1>
 
-          {/* Online Status */}
-          <OnlineStatus userId={editor.id} size="md" style={{ marginBottom: 10, justifyContent: 'center' }} />
+          {/* Online Status (Removed) */}
 
           {/* Rating */}
           <div style={{ display: 'flex', gap: 2, alignItems: 'center', marginBottom: 12 }}>
