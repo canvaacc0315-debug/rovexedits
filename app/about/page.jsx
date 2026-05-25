@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { HelpCircle, Plus, Minus, MessageCircle, Gamepad2, ShieldCheck, Palette, Users, Headphones, Info, Sparkles, Zap, Heart, Target, Eye, Award, ArrowRight, ChevronDown } from 'lucide-react';
 
+import { BannerAd } from '@/components/Ads/AdUnit';
+
 /* ── FAQ Data ── */
 const faqCategories = [
   { category: 'General', Icon: HelpCircle, questions: [
@@ -28,12 +30,12 @@ const faqCategories = [
 /* ── Animated Section Wrapper ── */
 function RevealSection({ children, delay = 0 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const isInView = useInView(ref, { once: true, margin: '-40px' }); // Adjusted for mobile
   return (
     <motion.div ref={ref}
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] }}
     >{children}</motion.div>
   );
 }
@@ -73,12 +75,12 @@ export default function AboutPage() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', paddingBottom: 80, position: 'relative', overflow: 'hidden' }}>
+    <div style={{ minHeight: '100vh', paddingBottom: 80, position: 'relative', overflowX: 'hidden' }}>
       {/* Ambient Background */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-        <div style={{ position: 'absolute', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,70,85,0.08) 0%, transparent 65%)', filter: 'blur(80px)', top: '10%', left: '60%' }} />
-        <div style={{ position: 'absolute', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(88,101,242,0.06) 0%, transparent 70%)', filter: 'blur(60px)', bottom: '20%', left: '10%' }} />
-        <div style={{ position: 'absolute', width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(168,85,247,0.05) 0%, transparent 70%)', filter: 'blur(50px)', top: '50%', right: '5%' }} />
+        <div style={{ position: 'absolute', width: '100vw', maxWidth: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,70,85,0.08) 0%, transparent 65%)', filter: 'blur(80px)', top: '10%', left: '50%', transform: 'translateX(-50%)' }} />
+        <div style={{ position: 'absolute', width: '100vw', maxWidth: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(88,101,242,0.06) 0%, transparent 70%)', filter: 'blur(60px)', bottom: '20%', left: '10%' }} />
+        <div style={{ position: 'absolute', width: '100vw', maxWidth: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(168,85,247,0.05) 0%, transparent 70%)', filter: 'blur(50px)', top: '50%', right: '5%' }} />
         <Particle size={4} left="15%" top="25%" delay={0} color="rgba(255,70,85,0.5)" />
         <Particle size={3} left="75%" top="35%" delay={1.2} color="rgba(0,255,212,0.4)" />
         <Particle size={5} left="45%" top="60%" delay={2} color="rgba(168,85,247,0.4)" />
@@ -87,7 +89,7 @@ export default function AboutPage() {
       </div>
 
       {/* Hero Header */}
-      <section style={{ position: 'relative', zIndex: 1, padding: '60px 20px 36px', textAlign: 'center' }}>
+      <section style={{ position: 'relative', zIndex: 1, padding: '100px 20px 36px', textAlign: 'center' }}>
         <div style={{ maxWidth: 720, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'rgba(255,70,85,0.06)', color: '#ff4655', borderRadius: 9999, fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.18em', border: '1px solid rgba(255,70,85,0.1)', marginBottom: 14 }}>
@@ -122,6 +124,11 @@ export default function AboutPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Ad: Middle of About Page */}
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 20px 20px', position: 'relative', zIndex: 1 }}>
+        <BannerAd slot="SLOT_ABOUT_MID" />
+      </div>
 
       {/* ══════════ ABOUT SECTION ══════════ */}
       <AnimatePresence mode="wait">
