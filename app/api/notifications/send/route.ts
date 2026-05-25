@@ -31,18 +31,19 @@ export async function POST(request: Request) {
       const tokenData = tokenDoc.data();
 
       try {
-        // Use DATA-ONLY messages so our service worker controls the notification.
-        // This is critical for background/offline notifications (like WhatsApp).
-        // "notification" field messages are handled by the browser and don't work
-        // reliably when the page is closed or on mobile.
+        // We include BOTH notification and data fields.
+        // The 'notification' field ensures Desktop browsers (Windows/Mac) reliably 
+        // show the native push notification even if the service worker is sleeping.
+        // The 'data' field handles our custom routing logic.
         await getAdminMessaging().send({
           token: tokenData.token,
-          // No "notification" field — this makes it a data-only message
+          notification: {
+            title,
+            body,
+          },
           data: {
             title,
             body,
-            icon: '/logo.png',
-            badge: '/logo.png',
             url: data?.url || '/',
             conversationId: data?.conversationId || '',
             timestamp: String(Date.now()),
@@ -51,6 +52,11 @@ export async function POST(request: Request) {
             headers: {
               Urgency: 'high',
             },
+            notification: {
+              icon: '/logo.png',
+              badge: '/logo.png',
+              requireInteraction: true,
+            },
             fcmOptions: {
               link: data?.url || '/',
             },
@@ -58,6 +64,10 @@ export async function POST(request: Request) {
           // Android config for PWA on Android devices
           android: {
             priority: 'high' as const,
+            notification: {
+              icon: 'logo',
+              color: '#ff4655'
+            }
           },
         });
         sent++;
