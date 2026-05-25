@@ -1,26 +1,5 @@
 'use client';
-
-import { useEffect, useRef } from 'react';
-
-/**
- * Google AdSense Ad Unit Component
- * 
- * Usage:
- *   <AdUnit slot="1234567890" format="auto" />          — Responsive auto-sized
- *   <AdUnit slot="1234567890" format="rectangle" />     — 300x250 rectangle
- *   <AdUnit slot="1234567890" format="horizontal" />    — Leaderboard/banner
- *   <AdUnit slot="1234567890" format="vertical" />      — Skyscraper
- *   <AdUnit slot="1234567890" format="fluid" layout="in-article" /> — In-article native
- * 
- * Props:
- *   slot       — Your AdSense ad unit slot ID (from AdSense dashboard)
- *   format     — 'auto' | 'rectangle' | 'horizontal' | 'vertical' | 'fluid'
- *   layout     — For fluid format: 'in-article' | 'in-feed'
- *   className  — Additional CSS class
- *   style      — Additional inline styles
- */
-
-const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-9545152753392718';
+import { useState, useEffect } from 'react';
 
 export default function AdUnit({
   slot,
@@ -29,67 +8,70 @@ export default function AdUnit({
   className = '',
   style = {},
 }) {
-  const adRef = useRef(null);
-  const isLoaded = useRef(false);
+  const [config, setConfig] = useState(null);
 
   useEffect(() => {
-    // Don't load ads in development
-    if (process.env.NODE_ENV === 'development') return;
-    // Don't double-load
-    if (isLoaded.current) return;
+    // Default to 300x250 Medium Rectangle
+    let adKey = '9bce10cc97782e7bf168a0bb5e478cdb'; 
+    let width = 300;
+    let height = 250;
 
-    try {
-      if (adRef.current && window.adsbygoogle) {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        isLoaded.current = true;
+    if (format === 'horizontal' || format === 'auto' || format === 'fluid') {
+      if (window.innerWidth < 480) {
+        adKey = 'd8d803ce1af8b8022e734c0e41e962eb'; // 320x50
+        width = 320;
+        height = 50;
+      } else if (window.innerWidth < 768) {
+        adKey = '32b919ff9c982a4ce364fd921c55cbbc'; // 468x60
+        width = 468;
+        height = 60;
+      } else {
+        adKey = '83bb8f0327c2a6f018d1214d9562e710'; // 728x90
+        width = 728;
+        height = 90;
       }
-    } catch (err) {
-      console.error('AdSense error:', err);
+    } else if (format === 'vertical') {
+      adKey = 'e412f9d9493da3bea697dbfbd7550dbf'; // 160x600
+      width = 160;
+      height = 600;
     }
-  }, []);
 
-  // In development, show a placeholder
-  if (process.env.NODE_ENV === 'development') {
-    return (
-      <div
-        className={`ad-unit ad-placeholder ${className}`}
-        style={{
-          background: 'rgba(255,70,85,0.04)',
-          border: '1px dashed rgba(255,70,85,0.2)',
-          borderRadius: 12,
-          padding: '20px 16px',
-          textAlign: 'center',
-          color: 'rgba(255,255,255,0.25)',
-          fontSize: '0.75rem',
-          fontFamily: 'var(--font-mono)',
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
-          minHeight: format === 'rectangle' ? 250 : format === 'horizontal' ? 90 : 100,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          ...style,
-        }}
-      >
-        AD SPACE — {format.toUpperCase()} ({slot || 'no slot'})
-      </div>
-    );
-  }
+    setConfig({ adKey, width, height });
+  }, [format]);
+
+  // Show nothing during SSR or if no config
+  if (!config) return <div style={{ minHeight: 90 }} />; 
+
+  // Safely render the ad using an isolated iframe so it doesn't break React hydration
+  const htmlContent = `
+    <html>
+      <head>
+        <style>body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; background: transparent; overflow: hidden; }</style>
+      </head>
+      <body>
+        <script>
+          atOptions = {
+            'key' : '${config.adKey}',
+            'format' : 'iframe',
+            'height' : ${config.height},
+            'width' : ${config.width},
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="https://www.highperformanceformat.com/${config.adKey}/invoke.js"></script>
+      </body>
+    </html>
+  `;
 
   return (
-    <div className={`ad-unit ${className}`} style={{ overflow: 'hidden', ...style }}>
-      <ins
-        ref={adRef}
-        className="adsbygoogle"
-        style={{
-          display: 'block',
-          ...(format === 'rectangle' ? { width: 300, height: 250 } : {}),
-        }}
-        data-ad-client={ADSENSE_CLIENT}
-        data-ad-slot={slot}
-        data-ad-format={format === 'rectangle' ? undefined : format}
-        data-full-width-responsive={format === 'auto' ? 'true' : undefined}
-        data-ad-layout={layout}
+    <div className={`ad-unit ${className}`} style={{ overflow: 'hidden', display: 'flex', justifyContent: 'center', width: '100%', ...style }}>
+      <iframe
+        srcDoc={htmlContent}
+        width={config.width}
+        height={config.height}
+        frameBorder="0"
+        scrolling="no"
+        style={{ border: 'none', overflow: 'hidden', background: 'transparent', maxWidth: '100%' }}
       />
     </div>
   );
