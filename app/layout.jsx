@@ -27,14 +27,13 @@ export default function RootLayout({ children }) {
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <link rel="apple-touch-icon" href="/logo.png" />
-          {/* Google AdSense */}
+          {/* Google AdSense Verification Script */}
           {ADSENSE_CLIENT && (
-            <Script
+            <script
               async
               src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
               crossOrigin="anonymous"
-              strategy="afterInteractive"
-            />
+            ></script>
           )}
         </head>
         <body>
