@@ -9,6 +9,7 @@ import { ArrowLeft, MessageCircle, AtSign, Gamepad2, Play, Download, X, Image as
 import RatingModal from '@/components/RatingModal';
 import ChatButton from '@/components/Chat/ChatButton';
 import OnlineStatus from '@/components/OnlineStatus';
+import { BannerAd } from '@/components/Ads/AdUnit';
 
 export default function EditorProfilePage() {
   const params = useParams();
@@ -209,6 +210,8 @@ export default function EditorProfilePage() {
           </div>
         </motion.div>
       </div>
+      {/* Ad: Between profile and gallery */}
+      <BannerAd slot="SLOT_EDITOR_1" style={{ padding: '16px 20px' }} />
 
       {/* Gallery */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 20px 0' }}>

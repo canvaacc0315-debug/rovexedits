@@ -46,6 +46,7 @@ const sections = [
       '• Cloudinary & ImageKit — Image hosting and CDN delivery.',
       '• Clerk — Authentication and user management.',
       '• Vercel — Website hosting and deployment.',
+      '• Google AdSense — Advertising and monetization.',
       'These services have their own privacy policies and handle data per their terms.',
     ],
   },
@@ -55,8 +56,10 @@ const sections = [
     content: [
       '• We use essential cookies to maintain your session and preferences.',
       '• Analytics cookies help us understand how visitors interact with the site.',
+      '• Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this and other websites.',
+      '• Google\'s use of advertising cookies enables it and its partners to serve ads based on your visits to this site and/or other sites on the Internet.',
+      '• You may opt out of personalized advertising by visiting Google Ads Settings (https://www.google.com/settings/ads).',
       '• You can disable cookies in your browser settings at any time.',
-      '• We do not sell or share cookie data with advertisers.',
     ],
   },
   {

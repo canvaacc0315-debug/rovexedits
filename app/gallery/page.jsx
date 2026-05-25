@@ -5,6 +5,7 @@ import { getAllEdits, incrementDownloads } from '@/lib/db';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Download, X, ArrowDownAZ, ArrowUpZA, Shuffle, SlidersHorizontal, LayoutGrid, Paintbrush, Layers, MessageCircle } from 'lucide-react';
 import ChatButton from '@/components/Chat/ChatButton';
+import { BannerAd } from '@/components/Ads/AdUnit';
 
 const sortOptions = ['Random', 'Newest', 'A-Z', 'Z-A'];
 const styleOptions = ['All', 'Regular', 'PHP'];
@@ -109,6 +110,9 @@ export default function GalleryPage() {
         </div>
       </section>
 
+      {/* Ad: Between filters and gallery grid */}
+      <BannerAd slot="SLOT_GALLERY_1" style={{ padding: '8px 20px 24px' }} />
+
       <section style={{ padding: '0 20px', maxWidth: 1200, margin: '0 auto' }}>
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', padding: 80 }}>
@@ -165,6 +169,9 @@ export default function GalleryPage() {
           </div>
         )}
       </section>
+
+      {/* Ad: After gallery grid */}
+      <BannerAd slot="SLOT_GALLERY_2" style={{ padding: '24px 20px' }} />
 
       {typeof document !== 'undefined' && createPortal(
         <AnimatePresence>

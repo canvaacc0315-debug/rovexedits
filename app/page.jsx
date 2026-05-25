@@ -9,6 +9,7 @@ import CountUp from '@/components/CountUp';
 import TiltCard from '@/components/TiltCard';
 import InfiniteMarquee from '@/components/InfiniteMarquee';
 import ChatButton from '@/components/Chat/ChatButton';
+import { BannerAd } from '@/components/Ads/AdUnit';
 export default function HomePage() {
   const [featuredEdits, setFeaturedEdits] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -216,6 +217,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Ad: Between Featured and Why Choose Us */}
+      <BannerAd slot="SLOT_HOME_1" style={{ padding: '24px 20px' }} />
       {/* Why Choose Us */}
       <section style={{ position: 'relative', zIndex: 1, padding: '60px 20px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -283,6 +286,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Ad: Between Why Choose Us and Reviews */}
+      <BannerAd slot="SLOT_HOME_2" style={{ padding: '24px 20px' }} />
       {/* Live Reviews */}
       {displayedReviews.length > 0 && (
         <section style={{ position: 'relative', zIndex: 1, padding: '60px 20px' }}>
