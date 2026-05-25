@@ -20,15 +20,22 @@ export default function NotificationProvider({ children }) {
 
     const init = async () => {
       try {
-        // Register service worker
+        // Register the dynamic service worker (served from API with real Firebase config)
+        let registration;
         if ('serviceWorker' in navigator) {
-          await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+          registration = await navigator.serviceWorker.register(
+            '/api/firebase-messaging-sw',
+            { scope: '/' }
+          );
+          // Wait for the service worker to be ready
+          await navigator.serviceWorker.ready;
+          console.log('[Notifications] Service worker registered');
         }
 
         // Request permission
         const permission = await requestNotificationPermission();
         if (permission !== 'granted') {
-          console.log('Notification permission not granted');
+          console.log('[Notifications] Permission not granted');
           return;
         }
 
@@ -36,11 +43,12 @@ export default function NotificationProvider({ children }) {
         const token = await getFCMToken();
         if (token) {
           await saveFCMToken(user.id, token);
+          console.log('[Notifications] FCM token saved');
         }
 
         initializedRef.current = true;
       } catch (err) {
-        console.error('Error initializing notifications:', err);
+        console.error('[Notifications] Init error:', err);
       }
     };
 
@@ -52,13 +60,15 @@ export default function NotificationProvider({ children }) {
     if (!messaging || typeof window === 'undefined') return;
 
     const unsubscribe = onMessage(messaging, (payload) => {
-      const { title, body } = payload.notification || {};
+      // Handle data-only messages in foreground
       const data = payload.data || {};
+      const title = data.title || payload.notification?.title || 'RovexEdits';
+      const body = data.body || payload.notification?.body || 'New message';
 
       // Show browser notification even when app is in foreground
       if (Notification.permission === 'granted') {
-        new Notification(title || 'RovexEdits', {
-          body: body || 'New notification',
+        new Notification(title, {
+          body,
           icon: '/logo.png',
           badge: '/logo.png',
           tag: data.conversationId || 'general',

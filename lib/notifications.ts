@@ -34,8 +34,26 @@ export async function getFCMToken(): Promise<string | null> {
       return null;
     }
 
-    // Ensure service worker is registered
-    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    // Use the dynamic service worker that has real Firebase config
+    let registration = await navigator.serviceWorker.getRegistration('/');
+    if (!registration) {
+      registration = await navigator.serviceWorker.register('/api/firebase-messaging-sw', {
+        scope: '/',
+      });
+    }
+
+    // Wait for the SW to be active
+    if (registration.installing || registration.waiting) {
+      await new Promise<void>((resolve) => {
+        const sw = registration!.installing || registration!.waiting;
+        if (!sw) { resolve(); return; }
+        sw.addEventListener('statechange', () => {
+          if (sw.state === 'activated') resolve();
+        });
+        // Timeout fallback
+        setTimeout(resolve, 5000);
+      });
+    }
 
     const token = await getToken(messaging, {
       vapidKey,
