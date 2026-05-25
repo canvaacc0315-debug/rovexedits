@@ -8,7 +8,7 @@ import ChatProvider from '@/components/Chat/ChatProvider';
 import ChatPanel from '@/components/Chat/ChatPanel';
 import NotificationProvider from '@/components/Notifications/NotificationProvider';
 
-const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-9545152753392718';
 
 export const metadata = {
   title: "RovexEdits — Premium Valorant Edits",

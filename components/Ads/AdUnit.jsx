@@ -20,7 +20,7 @@ import { useEffect, useRef } from 'react';
  *   style      — Additional inline styles
  */
 
-const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-XXXXXXXXXXXXXXXX';
+const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-9545152753392718';
 
 export default function AdUnit({
   slot,
