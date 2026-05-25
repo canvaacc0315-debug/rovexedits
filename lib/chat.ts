@@ -286,12 +286,19 @@ export async function broadcastFromAdmin(
 export async function clearConversation(conversationId: string, aliases: string[] = []): Promise<void> {
   if (!aliases || aliases.length === 0) return;
   try {
-    const updates: Record<string, any> = {};
+    const convRef = doc(db, 'conversations', conversationId);
+    const snap = await getDoc(convRef);
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+    const currentClearedAt = data.clearedAt || {};
     const now = Date.now();
+
     for (const alias of aliases) {
-      updates[`clearedAt.${alias}`] = now;
+      currentClearedAt[alias] = now;
     }
-    await updateDoc(doc(db, 'conversations', conversationId), updates);
+
+    await updateDoc(convRef, { clearedAt: currentClearedAt });
   } catch (error) {
     console.error('Error clearing conversation:', error);
     throw error;

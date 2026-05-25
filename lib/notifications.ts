@@ -75,9 +75,14 @@ export async function saveFCMToken(userId: string, token: string): Promise<void>
       navigator.userAgent
     );
 
-    const tokenDocRef = doc(db, 'fcmTokens', token);
+    // Create a unique ID using userId and token prefix so multiple 
+    // user aliases (like admin, editor doc ID) can share the same device token
+    const safeToken = token.substring(0, 32).replace(/[^a-zA-Z0-9]/g, '');
+    const docId = `${userId}_${safeToken}`;
+
+    const tokenDocRef = doc(db, 'fcmTokens', docId);
     const tokenData: FCMToken = {
-      id: token,
+      id: docId,
       userId,
       token,
       platform: isMobile ? 'web-mobile' : 'web-desktop',
@@ -88,7 +93,6 @@ export async function saveFCMToken(userId: string, token: string): Promise<void>
     await setDoc(tokenDocRef, tokenData, { merge: true });
   } catch (error) {
     console.error('Error saving FCM token:', error);
-    throw error;
   }
 }
 
