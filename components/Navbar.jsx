@@ -63,7 +63,7 @@ export default function Navbar() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px' }}>
               {/* Logo */}
               <Link href="/" onClick={handleLogoTap} style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, overflow: 'hidden', border: '2px solid rgba(255,70,85,0.4)', background: 'linear-gradient(135deg, rgba(255,70,85,0.2), transparent)' }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, overflow: 'hidden' }}>
                   <img src="/logo.png" alt="RovexEdits" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <div><span style={{ fontWeight: 700, fontSize: '1rem', letterSpacing: '0.06em', color: 'white' }}>ROVEX</span><span style={{ fontWeight: 700, fontSize: '1rem', letterSpacing: '0.06em', color: '#ff4655' }}>EDITS</span></div>
