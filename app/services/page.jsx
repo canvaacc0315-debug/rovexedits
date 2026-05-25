@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { Palette, Sparkles, ArrowRight, MessageCircle, Gamepad2, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import { BannerAd } from '@/components/Ads/AdUnit';
 
 const services = [
   { Icon: Palette, title: 'Custom Inventory Edit', description: 'Get a personalized Valorant inventory showcase designed exactly to your preferences.', features: ['1 Custom Design', '2 Revisions', '24h Delivery', 'High Resolution'], popular: false },
@@ -64,6 +65,11 @@ export default function ServicesPage() {
           ))}
         </div>
       </section>
+
+      {/* Ad: Middle of Services Page */}
+      <div style={{ maxWidth: 1000, margin: '0 auto', padding: '0 20px 40px' }}>
+        <BannerAd slot="SLOT_SERVICES_MID" />
+      </div>
 
       {/* Process */}
       <section style={{ padding: '60px 20px', maxWidth: 1000, margin: '0 auto' }}>

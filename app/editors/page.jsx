@@ -7,6 +7,7 @@ import Link from 'next/link';
 import RatingModal from '@/components/RatingModal';
 import ChatButton from '@/components/Chat/ChatButton';
 import OnlineStatus from '@/components/OnlineStatus';
+import { BannerAd } from '@/components/Ads/AdUnit';
 
 export default function EditorsPage() {
   const [editors, setEditors] = useState([]);
@@ -70,6 +71,10 @@ export default function EditorsPage() {
 
   return (
     <div style={{ minHeight: '100vh', paddingTop: 100, paddingBottom: 80 }}>
+      {/* Ad: Top of Editors Page */}
+      <div style={{ maxWidth: 1000, margin: '0 auto', marginBottom: 20 }}>
+        <BannerAd slot="SLOT_EDITORS_TOP" />
+      </div>
       <section style={{ maxWidth: 1000, margin: '0 auto', padding: '0 20px' }}>
         <div style={{ textAlign: 'center', marginBottom: 60 }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: 'rgba(255,70,85,0.08)', color: '#ff4655', borderRadius: 9999, fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.15em', border: '1px solid rgba(255,70,85,0.15)', marginBottom: 20 }}>

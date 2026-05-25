@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Store, ShieldCheck, ExternalLink, MessageCircle, Users, Loader2 } from 'lucide-react';
 import { getAllStoreLinks } from '@/lib/db';
+import { BannerAd } from '@/components/Ads/AdUnit';
 
 export default function StorePage() {
   const [links, setLinks] = useState([]);
@@ -43,6 +44,11 @@ export default function StorePage() {
 
   return (
     <div style={{ minHeight: '100vh', paddingTop: 100, paddingBottom: 80 }}>
+      {/* Ad: Top of Store Page */}
+      <div style={{ maxWidth: 1000, margin: '0 auto', marginBottom: 20 }}>
+        <BannerAd slot="SLOT_STORE_TOP" />
+      </div>
+
       {/* ── Trusted Account Stores ── */}
       <section style={{ maxWidth: 1000, margin: '0 auto', padding: '0 20px' }}>
         <div style={{ textAlign: 'center', marginBottom: 60 }}>
