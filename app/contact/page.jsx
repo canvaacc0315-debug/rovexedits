@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Mail, MessageCircle, Twitter, Instagram, ArrowRight, Star, Shield, Zap, CheckCircle, Palette, Lock, Users, Image as ImageIcon, Gamepad2, BookOpen, GraduationCap, PlayCircle, Pencil, RefreshCw } from 'lucide-react';
 import CountUp from '@/components/CountUp';
 import TiltCard from '@/components/TiltCard';
+import { BannerAd } from '@/components/Ads/AdUnit';
 
 const contactMethods = [
   { Icon: MessageCircle, title: 'WhatsApp', description: 'Fastest response time. Message us directly for instant support.', link: 'https://wa.me/9769606096', color: '#25d366', buttonText: 'Chat on WhatsApp' },
@@ -19,8 +20,13 @@ const benefits = [
 
 export default function ContactPage() {
   return (
-    <div style={{ minHeight: '100vh', paddingBottom: 80 }}>
-      <section style={{ padding: '60px 20px 40px', textAlign: 'center' }}>
+    <div style={{ minHeight: '100vh', paddingBottom: 80, paddingTop: 100 }}>
+      {/* Ad: Top of Contact Page */}
+      <div style={{ maxWidth: 800, margin: '0 auto', marginBottom: 20 }}>
+        <BannerAd slot="SLOT_CONTACT_TOP" />
+      </div>
+
+      <section style={{ padding: '0px 20px 40px', textAlign: 'center' }}>
         <div style={{ maxWidth: 800, margin: '0 auto' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'rgba(255,70,85,0.06)', color: '#ff4655', borderRadius: 9999, fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.18em', border: '1px solid rgba(255,70,85,0.1)', marginBottom: 14 }}>
             <MessageCircle size={12} /> Get In Touch

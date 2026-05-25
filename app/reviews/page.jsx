@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { getApprovedReviews, addReview } from '@/lib/db';
 import { motion } from 'framer-motion';
 import { Star, Send, MessageSquare, User, Quote } from 'lucide-react';
+import { BannerAd } from '@/components/Ads/AdUnit';
 
 export default function ReviewsPage() {
   const [reviews, setReviews] = useState([]);
@@ -33,9 +34,14 @@ export default function ReviewsPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', paddingBottom: 80 }}>
+    <div style={{ minHeight: '100vh', paddingBottom: 80, paddingTop: 100 }}>
+      {/* Ad: Top of Reviews Page */}
+      <div style={{ maxWidth: 800, margin: '0 auto', marginBottom: 20 }}>
+        <BannerAd slot="SLOT_REVIEWS_TOP" />
+      </div>
+
       {/* Hero */}
-      <section style={{ padding: '60px 20px 36px', textAlign: 'center' }}>
+      <section style={{ padding: '0px 20px 36px', textAlign: 'center' }}>
         <div style={{ maxWidth: 800, margin: '0 auto' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'rgba(255,70,85,0.06)', color: '#ff4655', borderRadius: 9999, fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.18em', border: '1px solid rgba(255,70,85,0.1)', marginBottom: 14 }}>
             <MessageSquare size={12} /> Testimonials

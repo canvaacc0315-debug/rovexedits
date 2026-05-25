@@ -1,6 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import { Shield, Lock, Eye, Database, UserCheck, Mail, AlertTriangle, FileText } from 'lucide-react';
+import { BannerAd } from '@/components/Ads/AdUnit';
 
 const sections = [
   {
@@ -96,7 +97,7 @@ export default function PrivacyPage() {
       </div>
 
       {/* Header */}
-      <section style={{ position: 'relative', zIndex: 1, padding: '60px 20px 36px', textAlign: 'center' }}>
+      <section style={{ position: 'relative', zIndex: 1, padding: '100px 20px 36px', textAlign: 'center' }}>
         <div style={{ maxWidth: 680, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'rgba(88,101,242,0.08)', color: '#5865f2', borderRadius: 9999, fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.18em', border: '1px solid rgba(88,101,242,0.15)', marginBottom: 14 }}>
@@ -117,6 +118,11 @@ export default function PrivacyPage() {
           </motion.p>
         </div>
       </section>
+
+      {/* Ad: Middle of Privacy Page */}
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 20px 20px', position: 'relative', zIndex: 1 }}>
+        <BannerAd slot="SLOT_PRIVACY_MID" />
+      </div>
 
       {/* Sections */}
       <section style={{ position: 'relative', zIndex: 1, padding: '20px 20px 0', maxWidth: 740, margin: '0 auto' }}>
