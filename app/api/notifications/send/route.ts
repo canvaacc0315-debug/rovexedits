@@ -27,7 +27,13 @@ export async function POST(request: Request) {
     let sent = 0;
     const invalidTokens: string[] = [];
 
-    for (const tokenDoc of tokensSnapshot.docs) {
+    // Deduplicate by token string just in case
+    const uniqueTokens = new Map();
+    for (const doc of tokensSnapshot.docs) {
+      uniqueTokens.set(doc.data().token, doc);
+    }
+
+    for (const tokenDoc of uniqueTokens.values()) {
       const tokenData = tokenDoc.data();
 
       try {

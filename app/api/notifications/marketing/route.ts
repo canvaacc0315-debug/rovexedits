@@ -70,7 +70,17 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: true, message: selected.title, recipientCount: 0 });
     }
 
-    const tokens = tokensSnapshot.docs.map(d => d.data().token);
+    // Group by userId and pick the most recently active token per user
+    const rawTokens = tokensSnapshot.docs.map(d => d.data());
+    const userTokens = new Map();
+    for (const t of rawTokens) {
+      if (!t.userId) continue;
+      const existing = userTokens.get(t.userId);
+      if (!existing || (t.lastActive && existing.lastActive && t.lastActive > existing.lastActive)) {
+        userTokens.set(t.userId, t);
+      }
+    }
+    const tokens = Array.from(userTokens.values()).map(t => t.token).filter(Boolean);
 
     // Send to all tokens using sendEachForMulticast
     const response = await getAdminMessaging().sendEachForMulticast({
