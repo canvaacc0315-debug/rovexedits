@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { getAllEdits, incrementDownloads, getApprovedReviews } from '@/lib/db';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -389,27 +390,30 @@ export default function HomePage() {
       </section>
 
       {/* Lightbox */}
-      <AnimatePresence>
-        {lightbox && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.95)', backdropFilter: 'blur(20px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={() => setLightbox(null)}>
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
-              style={{ position: 'relative', width: '90vw', maxWidth: 1400, height: '90vh', display: 'flex', flexDirection: 'column', background: '#0a0a0e', borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }} onClick={(e) => e.stopPropagation()}>
-              <button onClick={() => setLightbox(null)} style={{ position: 'absolute', top: 12, right: 12, zIndex: 10, width: 36, height: 36, background: 'rgba(255,255,255,0.08)', borderRadius: '50%', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={16} /></button>
-              <div style={{ flex: 1, minHeight: 0, position: 'relative', background: 'black', overflow: 'hidden' }}>
-                <img src={lightbox.imageUrl} alt={lightbox.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
-              </div>
-              <div style={{ padding: '16px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap', gap: 10, flexShrink: 0 }}>
-                <div>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', marginBottom: 3 }}>{lightbox.name}</h3>
-                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.82rem' }}>by {lightbox.editorName}</p>
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {lightbox && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.95)', backdropFilter: 'blur(20px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={() => setLightbox(null)}>
+              <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
+                style={{ position: 'relative', width: '90vw', maxWidth: 1400, height: '90vh', display: 'flex', flexDirection: 'column', background: '#0a0a0e', borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }} onClick={(e) => e.stopPropagation()}>
+                <button onClick={() => setLightbox(null)} style={{ position: 'absolute', top: 12, right: 12, zIndex: 10, width: 36, height: 36, background: 'rgba(255,255,255,0.08)', borderRadius: '50%', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={16} /></button>
+                <div style={{ flex: 1, minHeight: 0, position: 'relative', background: 'black', overflow: 'hidden' }}>
+                  <img src={lightbox.imageUrl} alt={lightbox.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
                 </div>
-                <button className="btn btn-primary" onClick={() => handleDownload(lightbox)} style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Download size={14} /> Download</button>
-              </div>
+                <div style={{ padding: '16px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap', gap: 10, flexShrink: 0 }}>
+                  <div>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', marginBottom: 3 }}>{lightbox.name}</h3>
+                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.82rem' }}>by {lightbox.editorName}</p>
+                  </div>
+                  <button className="btn btn-primary" onClick={() => handleDownload(lightbox)} style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Download size={14} /> Download</button>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
     </>
   );
