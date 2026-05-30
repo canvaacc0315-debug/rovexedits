@@ -18,7 +18,7 @@ export default function CountUp({ to, duration = 2, suffix = '' }) {
     if (isInView) {
       motionValue.set(to);
     }
-  }, [isInView, to, motionValue]);
+  }, [isInView, to, motionValue]); //tmkc
 
   useEffect(() => {
     springValue.on('change', (latest) => {
