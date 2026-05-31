@@ -136,6 +136,8 @@ export default function ChatProvider({ children }) {
     const unsubs = [];
     // Track docs per query source to properly handle removals
     const docsPerSource = new Map(); // source index -> Set of doc IDs
+    let loadedQueries = 0;
+    const queriesCount = queries.length;
 
     const rebuildConversations = () => {
       const merged = new Map();
@@ -160,10 +162,13 @@ export default function ChatProvider({ children }) {
       });
 
       setConversations(sortedConvos);
-      setLoading(false);
+      if (loadedQueries >= queriesCount) {
+        setLoading(false);
+      }
     };
 
     queries.forEach((q, index) => {
+      let hasLoadedFirstTime = false;
       docsPerSource.set(index, new Map());
       const unsub = onSnapshot(q, (snapshot) => {
         const sourceMap = new Map();
@@ -171,10 +176,21 @@ export default function ChatProvider({ children }) {
           sourceMap.set(doc.id, { id: doc.id, ...doc.data() });
         });
         docsPerSource.set(index, sourceMap);
+        
+        if (!hasLoadedFirstTime) {
+          hasLoadedFirstTime = true;
+          loadedQueries++;
+        }
         rebuildConversations();
       }, (error) => {
         console.error('Chat listener error:', error);
-        setLoading(false);
+        if (!hasLoadedFirstTime) {
+          hasLoadedFirstTime = true;
+          loadedQueries++;
+        }
+        if (loadedQueries >= queriesCount) {
+          setLoading(false);
+        }
       });
       unsubs.push(unsub);
     });
@@ -194,19 +210,32 @@ export default function ChatProvider({ children }) {
 
   // Trigger in-app notification when a new message arrives
   useEffect(() => {
+    // Wait until initial load is completely finished before considering notifications
+    if (loading) return;
+
     const latestConvo = conversations[0];
     if (!latestConvo) return;
 
     const currentUpdate = latestConvo.updatedAt;
-    if (lastUpdateRef.current && currentUpdate > lastUpdateRef.current) {
+    
+    // First update after loading finishes: set the ref and don't notify
+    if (lastUpdateRef.current === 0) {
+      lastUpdateRef.current = currentUpdate;
+      return;
+    }
+
+    if (currentUpdate > lastUpdateRef.current) {
       const msg = latestConvo.lastMessage;
       // Build all my aliases to check against
       const myAliases = [userId];
       if (myEditorDocId) myAliases.push(myEditorDocId);
       if (isAdmin) myAliases.push('admin');
       
+      // Check if there are actually unread messages for me
+      const isUnread = myAliases.some(alias => latestConvo.unreadCount?.[alias] > 0);
+      
       // Ensure we didn't send it ourselves (check all aliases)
-      if (msg && !myAliases.includes(msg.senderId)) {
+      if (msg && !myAliases.includes(msg.senderId) && isUnread) {
         playNotificationSound();
         const sender = latestConvo.participantDetails?.[msg.senderId];
         setToast({
@@ -220,7 +249,7 @@ export default function ChatProvider({ children }) {
     }
     
     lastUpdateRef.current = currentUpdate;
-  }, [conversations, userId, myEditorDocId, isAdmin]);
+  }, [conversations, userId, myEditorDocId, isAdmin, loading]);
 
   // Open chat with a specific editor
   const openChat = useCallback(async (editorId, editorDetails) => {
