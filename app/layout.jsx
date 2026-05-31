@@ -11,8 +11,55 @@ import NotificationProvider from '@/components/Notifications/NotificationProvide
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-9545152753392718';
 
 export const metadata = {
-  title: "RovexEdits — Premium Valorant Edits",
-  description: "The most trusted marketplace for high-quality Valorant inventory designs.",
+  metadataBase: new URL('https://rovexedits.com'),
+  title: {
+    default: "RovexEdits — Premium Valorant Edits",
+    template: "%s | RovexEdits",
+  },
+  description: "The most trusted marketplace for high-quality Valorant inventory designs and video editing services.",
+  keywords: ["Valorant edits", "video editing", "Valorant inventory designs", "RovexEdits", "gaming montages"],
+  authors: [{ name: "RovexEdits" }],
+  creator: "RovexEdits",
+  publisher: "RovexEdits",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    title: "RovexEdits — Premium Valorant Edits",
+    description: "The most trusted marketplace for high-quality Valorant inventory designs and video editing services.",
+    url: "https://rovexedits.com",
+    siteName: "RovexEdits",
+    images: [
+      {
+        url: "/logo.png",
+        width: 800,
+        height: 800,
+        alt: "RovexEdits Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RovexEdits — Premium Valorant Edits",
+    description: "The most trusted marketplace for high-quality Valorant inventory designs and video editing services.",
+    images: ["/logo.png"],
+    creator: "@rovexedits",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   manifest: "/manifest.json",
   themeColor: "#06060a",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1",
