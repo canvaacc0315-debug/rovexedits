@@ -26,6 +26,12 @@ const messaging = firebase.messaging();
 
 // Handle background messages (when page is closed or not focused)
 messaging.onBackgroundMessage((payload) => {
+  // If the message contains a notification object, the Firebase SDK automatically
+  // displays it. We should not manually show another one, otherwise the user gets duplicates.
+  if (payload.notification) {
+    return;
+  }
+
   // Data-only messages — we control the notification display
   const data = payload.data || {};
   const title = data.title || 'RovexEdits';
