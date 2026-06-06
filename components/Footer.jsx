@@ -9,12 +9,14 @@ const footerLinks = [
   { href: '/gallery', label: 'Gallery' },
   { href: '/services', label: 'Services' },
   { href: '/reviews', label: 'Reviews' },
+  { href: '/blog', label: 'Blog' },
 ];
 
 const companyLinks = [
   { href: '/about', label: 'About Us' },
   { href: '/contact', label: 'Contact Us' },
   { href: '/privacy', label: 'Privacy Policy' },
+  { href: '/terms', label: 'Terms of Service' },
 ];
 
 export default function Footer() {
@@ -97,10 +99,16 @@ export default function Footer() {
 
         <div style={{ paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
           <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)' }}>&copy; {new Date().getFullYear()} RovexEdits. All Rights Reserved.</p>
-          <Link href="/privacy" style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', textDecoration: 'none', transition: 'color 0.3s' }}
-            onMouseEnter={(e) => e.currentTarget.style.color = '#ff4655'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.2)'}
-          >Privacy Policy</Link>
+          <div style={{ display: 'flex', gap: 15 }}>
+            <Link href="/terms" style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', textDecoration: 'none', transition: 'color 0.3s' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#ff4655'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.2)'}
+            >Terms of Service</Link>
+            <Link href="/privacy" style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', textDecoration: 'none', transition: 'color 0.3s' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#ff4655'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.2)'}
+            >Privacy Policy</Link>
+          </div>
         </div>
       </div>
     </footer>

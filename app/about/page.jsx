@@ -153,6 +153,26 @@ export default function AboutPage() {
               </RevealSection>
             </section>
 
+            {/* The Art of Valorant Edits (SEO & Content Expansion) */}
+            <section style={{ padding: '0 20px 50px', maxWidth: 800, margin: '0 auto' }}>
+              <RevealSection delay={0.1}>
+                <div style={{ padding: 'clamp(24px, 5vw, 40px)', borderRadius: 20, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <h2 style={{ fontSize: 'clamp(1.4rem, 3vw, 1.8rem)', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 16, color: 'white' }}>
+                    The Art of <span style={{ color: '#ff4655' }}>Valorant Inventory Edits</span>
+                  </h2>
+                  <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.8, fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+                    In the fast-paced world of competitive gaming, your digital persona is everything. Valorant isn't just a game; it's a vibrant community where players express themselves through meticulously crafted cosmetic items, gun buddies, and player cards. However, taking a simple screenshot of your inventory often fails to capture the true aesthetic value of these premium items.
+                  </p>
+                  <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.8, fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+                    That is where RovexEdits comes in. A custom Valorant inventory edit is a specialized form of digital art. Our talented editors take raw 3D models and in-game assets and transform them using advanced software like Photoshop, Blender, and After Effects. By applying custom lighting, thematic color grading, dynamic background integration, and bespoke typography, we elevate a standard game screen into a breathtaking visual showcase.
+                  </p>
+                  <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.8, fontSize: '0.95rem' }}>
+                    Whether you are a professional esports player looking for a clean Twitter header, a content creator needing an eye-catching YouTube banner, or just a dedicated player who wants to flex a fully upgraded Kuronami bundle in your Discord profile, a premium edit is the ultimate statement. We bridge the gap between gaming and professional graphic design, giving every player the tools to build a stunning visual brand.
+                  </p>
+                </div>
+              </RevealSection>
+            </section>
+
             {/* Core Values */}
             <section style={{ padding: '0 20px 50px', maxWidth: 900, margin: '0 auto' }}>
               <RevealSection>

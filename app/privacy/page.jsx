@@ -3,90 +3,6 @@ import { motion } from 'framer-motion';
 import { Shield, Lock, Eye, Database, UserCheck, Mail, AlertTriangle, FileText } from 'lucide-react';
 import { BannerAd } from '@/components/Ads/AdUnit';
 
-const sections = [
-  {
-    Icon: Eye,
-    title: 'Information We Collect',
-    content: [
-      'When you use RovexEdits, we may collect the following types of information:',
-      '• Account information (name, email) when you sign in via our authentication provider.',
-      '• Usage data such as pages visited, edits viewed, and downloads made.',
-      '• Device and browser information for analytics and site optimization.',
-      '• Any information you voluntarily provide through reviews or contact forms.',
-    ],
-  },
-  {
-    Icon: Database,
-    title: 'How We Use Your Information',
-    content: [
-      'We use collected information to:',
-      '• Provide and improve our services and user experience.',
-      '• Process and fulfill custom edit orders.',
-      '• Communicate with you regarding orders, updates, and support.',
-      '• Analyze site usage to enhance performance and features.',
-      '• Prevent fraud and ensure platform security.',
-    ],
-  },
-  {
-    Icon: Lock,
-    title: 'Data Protection',
-    content: [
-      'We take your data security seriously:',
-      '• All data transmissions are encrypted using SSL/TLS protocols.',
-      '• Passwords are hashed using industry-standard bcrypt encryption.',
-      '• Access to personal data is restricted to authorized personnel only.',
-      '• We regularly review and update our security practices.',
-    ],
-  },
-  {
-    Icon: UserCheck,
-    title: 'Third-Party Services',
-    content: [
-      'We use trusted third-party services to operate our platform:',
-      '• Firebase (Google) — Database and backend services.',
-      '• Cloudinary & ImageKit — Image hosting and CDN delivery.',
-      '• Clerk — Authentication and user management.',
-      '• Vercel — Website hosting and deployment.',
-      '• Google AdSense — Advertising and monetization.',
-      'These services have their own privacy policies and handle data per their terms.',
-    ],
-  },
-  {
-    Icon: FileText,
-    title: 'Cookies & Tracking',
-    content: [
-      '• We use essential cookies to maintain your session and preferences.',
-      '• Analytics cookies help us understand how visitors interact with the site.',
-      '• Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this and other websites.',
-      '• Google\'s use of advertising cookies enables it and its partners to serve ads based on your visits to this site and/or other sites on the Internet.',
-      '• You may opt out of personalized advertising by visiting Google Ads Settings (https://www.google.com/settings/ads).',
-      '• You can disable cookies in your browser settings at any time.',
-    ],
-  },
-  {
-    Icon: AlertTriangle,
-    title: 'Your Rights',
-    content: [
-      'You have the right to:',
-      '• Access the personal data we hold about you.',
-      '• Request correction or deletion of your personal data.',
-      '• Opt out of marketing communications at any time.',
-      '• Request a copy of your data in a portable format.',
-      'To exercise these rights, contact us via WhatsApp or Discord.',
-    ],
-  },
-  {
-    Icon: Mail,
-    title: 'Contact Us',
-    content: [
-      'If you have any questions or concerns about this Privacy Policy, please reach out:',
-      '• WhatsApp: +91 9769606096',
-      '• Discord: discord.gg/RcanGzdcn',
-      '• Instagram: @vai_bhav.03',
-    ],
-  },
-];
-
 export default function PrivacyPage() {
   return (
     <div style={{ minHeight: '100vh', paddingBottom: 80, position: 'relative' }}>
@@ -110,7 +26,7 @@ export default function PrivacyPage() {
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
             style={{ color: 'rgba(255,255,255,0.4)', maxWidth: 480, margin: '0 auto 8px' }}>
-            Your privacy matters to us. Here is how we handle your data.
+            We respect your privacy and are committed to protecting your personal data.
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
             style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'rgba(255,255,255,0.25)' }}>
@@ -124,38 +40,44 @@ export default function PrivacyPage() {
         <BannerAd slot="SLOT_PRIVACY_MID" />
       </div>
 
-      {/* Sections */}
-      <section style={{ position: 'relative', zIndex: 1, padding: '20px 20px 0', maxWidth: 740, margin: '0 auto' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {sections.map((section, i) => (
-            <motion.div key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 + i * 0.06 }}
-              style={{ padding: 'clamp(20px, 4vw, 28px)', borderRadius: 16, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', transition: 'border-color 0.3s' }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(88,101,242,0.2)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(88,101,242,0.1)', border: '1px solid rgba(88,101,242,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#5865f2', flexShrink: 0 }}>
-                  <section.Icon size={16} />
-                </div>
-                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', fontWeight: 600, color: 'white' }}>{section.title}</h2>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingLeft: 48 }}>
-                {section.content.map((line, j) => (
-                  <p key={j} style={{ fontSize: '0.84rem', color: line.startsWith('•') ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.5)', lineHeight: 1.7, paddingLeft: line.startsWith('•') ? 4 : 0 }}>{line}</p>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+      {/* Content */}
+      <section style={{ position: 'relative', zIndex: 1, padding: '20px 20px 0', maxWidth: 800, margin: '0 auto' }}>
+        <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: 'clamp(24px, 5vw, 40px)', color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, fontSize: '0.95rem' }}>
+          
+          <h2 style={{ fontSize: '1.4rem', color: 'white', fontWeight: 600, marginBottom: '1rem', fontFamily: 'var(--font-display)', display: 'flex', alignItems: 'center', gap: '10px' }}><Eye size={20} color="#5865f2"/> 1. Information We Collect</h2>
+          <p style={{ marginBottom: '2rem' }}>When you interact with RovexEdits, we collect certain personal information to provide and improve our services. This includes account information such as your name and email address when you register using our authentication providers (e.g., Clerk). We also collect usage data, which encompasses the pages you visit, the edits you view or download, and diagnostic information about your device, browser type, and operating system. Furthermore, any information you voluntarily provide through contact forms, reviews, or customer service interactions is securely stored to assist you better.</p>
+
+          <h2 style={{ fontSize: '1.4rem', color: 'white', fontWeight: 600, marginBottom: '1rem', fontFamily: 'var(--font-display)', display: 'flex', alignItems: 'center', gap: '10px' }}><Database size={20} color="#5865f2"/> 2. How We Use Your Information</h2>
+          <p style={{ marginBottom: '2rem' }}>The data we collect serves multiple operational purposes. Primarily, it enables us to process and fulfill custom edit orders effectively, connecting you with the right editors and facilitating secure communication. We use your contact information to send you updates regarding your orders, respond to inquiries, and notify you about changes to our platform. Additionally, usage data is analyzed to monitor site performance, understand user behavior, and implement improvements to our user interface and feature set. We also utilize this data to detect and prevent fraudulent activities, ensuring a secure environment for all users.</p>
+
+          <h2 style={{ fontSize: '1.4rem', color: 'white', fontWeight: 600, marginBottom: '1rem', fontFamily: 'var(--font-display)', display: 'flex', alignItems: 'center', gap: '10px' }}><FileText size={20} color="#5865f2"/> 3. Cookies and Advertising (Google AdSense)</h2>
+          <p style={{ marginBottom: '1rem' }}>RovexEdits uses cookies—small text files stored on your device—to enhance your browsing experience, maintain your session, and analyze site traffic. Essential cookies are necessary for the website to function correctly, while analytics cookies help us measure performance.</p>
+          <p style={{ marginBottom: '2rem' }}>Importantly, we partner with third-party advertising networks, specifically <strong>Google AdSense</strong>. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to our website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to you based on your internet browsing history. You can opt out of personalized advertising by visiting the <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" style={{ color: '#5865f2', textDecoration: 'underline' }}>Google Ads Settings page</a>.</p>
+
+          <h2 style={{ fontSize: '1.4rem', color: 'white', fontWeight: 600, marginBottom: '1rem', fontFamily: 'var(--font-display)', display: 'flex', alignItems: 'center', gap: '10px' }}><UserCheck size={20} color="#5865f2"/> 4. Third-Party Service Providers</h2>
+          <p style={{ marginBottom: '2rem' }}>To operate RovexEdits efficiently, we share specific data with trusted third-party service providers. This includes Firebase for our core database and backend infrastructure, Cloudinary and ImageKit for hosting and delivering high-resolution images, Clerk for managing user authentication and security, and Vercel for website hosting. These providers are bound by strict data processing agreements and are only permitted to handle your data in ways that are necessary to provide their respective services to us.</p>
+
+          <h2 style={{ fontSize: '1.4rem', color: 'white', fontWeight: 600, marginBottom: '1rem', fontFamily: 'var(--font-display)', display: 'flex', alignItems: 'center', gap: '10px' }}><Lock size={20} color="#5865f2"/> 5. Data Security and Protection</h2>
+          <p style={{ marginBottom: '2rem' }}>We implement robust, industry-standard security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. All data transmitted between your browser and our servers is encrypted using SSL/TLS protocols. Passwords and sensitive authentication tokens are hashed using bcrypt or managed securely by our authentication providers. While we strive to use commercially acceptable means to protect your data, please be aware that no method of transmission over the Internet or electronic storage is 100% secure.</p>
+
+          <h2 style={{ fontSize: '1.4rem', color: 'white', fontWeight: 600, marginBottom: '1rem', fontFamily: 'var(--font-display)', display: 'flex', alignItems: 'center', gap: '10px' }}><AlertTriangle size={20} color="#5865f2"/> 6. Your Data Rights</h2>
+          <p style={{ marginBottom: '2rem' }}>Depending on your location, you may have specific rights regarding your personal data under laws such as the GDPR or CCPA. You have the right to request access to the personal data we hold about you, request corrections to any inaccurate data, or request the deletion of your account and associated personal information. You may also opt out of marketing communications at any time. To exercise any of these rights, please contact our support team using the details provided below.</p>
+
+          <h2 style={{ fontSize: '1.4rem', color: 'white', fontWeight: 600, marginBottom: '1rem', fontFamily: 'var(--font-display)', display: 'flex', alignItems: 'center', gap: '10px' }}><Mail size={20} color="#5865f2"/> 7. Contact Us</h2>
+          <p style={{ marginBottom: '0.5rem' }}>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please reach out to us through our official channels:</p>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'rgba(255,255,255,0.8)' }}>
+            <li>• WhatsApp: +91 9769606096</li>
+            <li>• Discord: discord.gg/RcanGzdcn</li>
+            <li>• Instagram: @vai_bhav.03</li>
+          </ul>
+
         </div>
 
         {/* Footer Note */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
           style={{ marginTop: 40, padding: 24, borderRadius: 14, background: 'rgba(88,101,242,0.04)', border: '1px solid rgba(88,101,242,0.1)', textAlign: 'center' }}>
           <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.4)', lineHeight: 1.7 }}>
-            By using RovexEdits, you agree to this Privacy Policy. We may update this policy periodically — check back for the latest version.
+            By using RovexEdits, you acknowledge that you have read and understood this Privacy Policy.
           </p>
         </motion.div>
       </section>

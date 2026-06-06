@@ -374,6 +374,26 @@ export default function HomePage() {
         </section>
       )}
 
+      {/* SEO / Content Expansion Block */}
+      <section style={{ position: 'relative', zIndex: 1, padding: '40px 20px 20px' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: 20, padding: 'clamp(24px, 5vw, 40px)' }}>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 16, color: 'white' }}>
+            Elevate Your Gaming Identity with <span style={{ color: '#ff4655' }}>Premium Valorant Edits</span>
+          </h2>
+          <div style={{ columnCount: 'auto', columnWidth: 350, columnGap: 30, color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', lineHeight: 1.8 }}>
+            <p style={{ marginBottom: 16 }}>
+              In the modern competitive gaming landscape, your digital presence extends far beyond your rank. A custom <strong>Valorant inventory edit</strong> is the ultimate way to showcase your dedication, style, and premium skin collections. Whether you are a top-tier radiant player, an aspiring content creator, or a dedicated collector of exclusive bundles like Kuronami or Mystbloom, a professionally designed edit highlights your unique gaming identity.
+            </p>
+            <p style={{ marginBottom: 16 }}>
+              At RovexEdits, we specialize in transforming raw in-game screenshots into stunning visual masterpieces. Our hand-picked team of elite digital artists utilizes advanced rendering techniques, thematic color grading, and dynamic visual effects (VFX) to create customized showcases. These high-resolution designs are perfect for use as Twitter banners, YouTube headers, Discord profile backgrounds, and community flexing.
+            </p>
+            <p style={{ marginBottom: 0 }}>
+              We understand the nuances of the Valorant aesthetic. By blending the tactical shooter's unique art style with modern graphic design principles, our marketplace offers unparalleled quality. Browse our extensive gallery of featured edits, connect directly with our talented creators, and commission a piece of digital art that perfectly encapsulates your Valorant journey.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section style={{ position: 'relative', zIndex: 1, padding: '60px 20px' }}>
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
