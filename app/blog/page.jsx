@@ -48,7 +48,7 @@ export default function BlogPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
             >
-              <Link href={\`/blog/\${post.slug}\`} style={{ display: 'block', textDecoration: 'none' }}>
+              <Link href={`/blog/${post.slug}`} style={{ display: 'block', textDecoration: 'none' }}>
                 <div style={{
                   background: 'rgba(255,255,255,0.02)',
                   border: '1px solid rgba(255,255,255,0.06)',
@@ -96,11 +96,11 @@ export default function BlogPage() {
         </div>
       </section>
       
-      <style dangerouslySetInnerHTML={{__html: \`
+      <style dangerouslySetInnerHTML={{__html: `
         .blog-img:hover {
           transform: scale(1.05);
         }
-      \`}} />
+      `}} />
     </div>
   );
 }

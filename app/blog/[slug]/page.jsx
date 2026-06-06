@@ -15,7 +15,7 @@ export function generateMetadata({ params }) {
   if (!post) return { title: 'Not Found' };
   
   return {
-    title: \`\${post.title} | RovexEdits Blog\`,
+    title: `${post.title} | RovexEdits Blog`,
     description: post.excerpt,
   };
 }
@@ -29,7 +29,7 @@ export default function BlogPostPage({ params }) {
 
   // Basic markdown-like parsing for the simple content format used in blogData.js
   const renderContent = (text) => {
-    return text.split('\\n').map((line, i) => {
+    return text.split('\n').map((line, i) => {
       if (line.trim().startsWith('## ')) {
         return <h2 key={i} style={{ fontSize: '1.6rem', fontWeight: 700, fontFamily: 'var(--font-display)', color: 'white', marginTop: '2rem', marginBottom: '1rem' }}>{line.replace('## ', '')}</h2>;
       }
@@ -41,7 +41,7 @@ export default function BlogPostPage({ params }) {
          return <li key={i} style={{ marginBottom: '0.5rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.8 }}>{line.replace('- ', '')}</li>;
       }
       if (line.trim().startsWith('**') && line.trim().endsWith('**')) {
-         return <strong key={i} style={{ display: 'block', marginBottom: '1rem', color: 'white', fontSize: '1.1rem' }}>{line.replace(/\\*\\*/g, '')}</strong>;
+         return <strong key={i} style={{ display: 'block', marginBottom: '1rem', color: 'white', fontSize: '1.1rem' }}>{line.replace(/\*\*/g, '')}</strong>;
       }
       if (line.trim() === '') return <br key={i} />;
       return <p key={i} style={{ marginBottom: '1rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, fontSize: '1rem' }}>{line}</p>;
@@ -86,9 +86,9 @@ export default function BlogPostPage({ params }) {
         </div>
       </div>
       
-      <style dangerouslySetInnerHTML={{__html: \`
+      <style dangerouslySetInnerHTML={{__html: `
         .hover-text-primary:hover { color: #ff4655 !important; }
-      \`}} />
+      `}} />
     </article>
   );
 }
