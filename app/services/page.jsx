@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { BannerAd } from '@/components/Ads/AdUnit';
 
 const services = [
-  { Icon: Palette, title: 'Custom Inventory Edit', description: 'Get a personalized Valorant inventory showcase designed exactly to your preferences.', features: ['1 Custom Design', '2 Revisions', '24h Delivery', 'High Resolution'], popular: false },
-  { Icon: Sparkles, title: 'Premium Bundle Pack', description: 'Get a personalized Valorant bundle pack designed exactly to your preferences.', features: ['Unlimited Edits (Active Pack)', 'Unlimited Revisions', '12h Delivery', 'High Resolution'], popular: true },
+  { Icon: Palette, title: 'Regular Edits', description: '5pp & above', features: ['1 Custom Design', '2 Revisions', '24h Delivery', 'High Resolution'], popular: false },
+  { Icon: Sparkles, title: 'Premium Bundle Pack', description: '250 prems for 4pp. With offer, contact to know more!', features: ['Unlimited Edits (Active Pack)', 'Unlimited Revisions', '12h Delivery', 'High Resolution'], popular: true },
+  { Icon: Palette, title: 'Custom Bundle Pack', description: 'Contact us', features: ['Custom Design', 'Unlimited Revisions', 'Custom Delivery Time', 'High Resolution'], popular: false },
 ];
 
 const processSteps = [
