@@ -39,6 +39,7 @@ export default function ServicesPage() {
                 position: 'relative', padding: '32px 28px', borderRadius: 20,
                 background: service.popular ? 'linear-gradient(180deg, rgba(255,70,85,0.1) 0%, rgba(255,70,85,0.02) 100%)' : 'rgba(255,255,255,0.02)',
                 border: `1px solid ${service.popular ? 'rgba(255,70,85,0.2)' : 'rgba(255,255,255,0.06)'}`,
+                display: 'flex', flexDirection: 'column'
               }}>
               {service.popular && (
                 <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)' }}>
@@ -50,7 +51,7 @@ export default function ServicesPage() {
               </div>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: 12, fontFamily: 'var(--font-display)' }}>{service.title}</h3>
               <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', lineHeight: 1.6, marginBottom: 24 }}>{service.description}</p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px 0' }}>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px 0', flexGrow: 1 }}>
                 {service.features.map((f, j) => (
                   <li key={j} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 0', color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem' }}>
                     <CheckCircle size={14} style={{ color: '#ff4655', flexShrink: 0 }} /> {f}
@@ -59,7 +60,7 @@ export default function ServicesPage() {
               </ul>
               <a href="https://wa.me/9769606096" target="_blank" rel="noopener noreferrer"
                 className={`btn ${service.popular ? 'btn-primary' : 'btn-ghost'}`}
-                style={{ width: '100%', justifyContent: 'center', padding: '12px 24px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                style={{ width: '100%', justifyContent: 'center', padding: '12px 24px', display: 'flex', alignItems: 'center', gap: 6, marginTop: 'auto' }}>
                 <MessageCircle size={14} /> Contact Us
               </a>
             </motion.div>
