@@ -31,7 +31,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Service Cards */}
-      <section style={{ padding: '0 20px 80px', maxWidth: 860, margin: '0 auto' }}>
+      <section style={{ padding: '0 20px 80px', maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
           {services.map((service, i) => (
             <motion.div key={i} whileHover={{ y: -8 }} transition={{ duration: 0.3 }}
