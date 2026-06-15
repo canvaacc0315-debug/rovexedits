@@ -10,8 +10,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export function generateMetadata({ params }) {
-  const post = blogPosts.find((p) => p.slug === params.slug);
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const post = blogPosts.find((p) => p.slug === slug);
   if (!post) return { title: 'Not Found' };
   
   return {
@@ -20,8 +21,9 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function BlogPostPage({ params }) {
-  const post = blogPosts.find((p) => p.slug === params.slug);
+export default async function BlogPostPage({ params }) {
+  const { slug } = await params;
+  const post = blogPosts.find((p) => p.slug === slug);
   
   if (!post) {
     notFound();
