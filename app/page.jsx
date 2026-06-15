@@ -395,7 +395,7 @@ export default function HomePage() {
           </div>
 
           {/* Bento Grid Layout */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))', gap: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: 20 }}>
 
             {/* Card 1 — Your Digital Identity */}
             <motion.div whileHover={{ y: -6, scale: 1.01 }} transition={{ duration: 0.35, type: 'spring', stiffness: 300 }}
@@ -435,27 +435,23 @@ export default function HomePage() {
               </p>
             </motion.div>
 
-            {/* Card 3 — Full Width Premium Card */}
-            <motion.div whileHover={{ y: -6, scale: 1.005 }} transition={{ duration: 0.35, type: 'spring', stiffness: 300 }}
-              style={{ position: 'relative', padding: 'clamp(28px, 4vw, 36px)', borderRadius: 22, background: 'linear-gradient(135deg, rgba(0,255,212,0.07) 0%, rgba(168,85,247,0.04) 50%, rgba(10,10,14,0.8) 100%)', border: '1px solid rgba(0,255,212,0.1)', overflow: 'hidden', gridColumn: '1 / -1' }}>
+            {/* Card 3 — Premium Card */}
+            <motion.div whileHover={{ y: -6, scale: 1.01 }} transition={{ duration: 0.35, type: 'spring', stiffness: 300 }}
+              style={{ position: 'relative', padding: 'clamp(28px, 4vw, 36px)', borderRadius: 22, background: 'linear-gradient(135deg, rgba(0,255,212,0.07) 0%, rgba(168,85,247,0.04) 50%, rgba(10,10,14,0.8) 100%)', border: '1px solid rgba(0,255,212,0.1)', overflow: 'hidden' }}>
               {/* Top glow line */}
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent 5%, rgba(0,255,212,0.5), rgba(168,85,247,0.4), transparent 95%)' }} />
-              {/* Left glow orb */}
-              <div style={{ position: 'absolute', top: -40, left: -20, width: 150, height: 150, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,255,212,0.1), transparent 70%)', pointerEvents: 'none' }} />
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent 10%, rgba(0,255,212,0.5), rgba(168,85,247,0.4), transparent 90%)' }} />
+              {/* Corner glow */}
+              <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,255,212,0.15), transparent 70%)', pointerEvents: 'none' }} />
               
-              <div style={{ display: 'flex', gap: 'clamp(20px, 3vw, 32px)', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                <div style={{ width: 52, height: 52, borderRadius: 14, background: 'linear-gradient(135deg, rgba(0,255,212,0.15), rgba(168,85,247,0.1))', border: '1px solid rgba(0,255,212,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00ffd4', flexShrink: 0, boxShadow: '0 0 25px rgba(0,255,212,0.12)' }}>
-                  <Trophy size={24} />
-                </div>
-                <div style={{ flex: 1, minWidth: 260 }}>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 12, color: 'white' }}>
-                    The Valorant Design Standard
-                  </h3>
-                  <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.9rem', lineHeight: 1.8, maxWidth: 800 }}>
-                    We understand the nuances of the Valorant aesthetic. By blending the tactical shooter's unique art style with modern graphic design principles, our marketplace offers unparalleled quality. Browse our extensive gallery of featured edits, connect directly with our talented creators, and commission a piece of digital art that perfectly encapsulates your Valorant journey.
-                  </p>
-                </div>
+              <div style={{ width: 52, height: 52, borderRadius: 14, background: 'linear-gradient(135deg, rgba(0,255,212,0.15), rgba(168,85,247,0.1))', border: '1px solid rgba(0,255,212,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, color: '#00ffd4', boxShadow: '0 0 25px rgba(0,255,212,0.12)' }}>
+                <Trophy size={24} />
               </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 12, color: 'white' }}>
+                The Valorant Design Standard
+              </h3>
+              <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.9rem', lineHeight: 1.8 }}>
+                We understand the nuances of the Valorant aesthetic. By blending the tactical shooter's unique art style with modern graphic design principles, our marketplace offers unparalleled quality. Browse our extensive gallery of featured edits, connect directly with our talented creators, and commission a piece of digital art that perfectly encapsulates your Valorant journey.
+              </p>
             </motion.div>
           </div>
         </div>
