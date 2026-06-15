@@ -72,7 +72,7 @@ export default function Footer() {
           <div>
             <h4 style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, marginBottom: 14, fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Contact</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: 6 }}><Zap size={13} /> Available 24/7</span>
+              <a href="mailto:vaibhavpatil0315@gmail.com" style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.82rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, transition: 'color 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#ff4655'} onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}><Mail size={13} /> vaibhavpatil0315@gmail.com</a>
               <a href="https://wa.me/9769606096" target="_blank" rel="noopener noreferrer" style={{ color: '#25d366', fontSize: '0.82rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}><MessageCircle size={13} /> WhatsApp</a>
               <a href="https://discord.gg/RcanGzdcn" target="_blank" rel="noopener noreferrer" style={{ color: '#5865f2', fontSize: '0.82rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}><Gamepad2 size={13} /> Discord</a>
             </div>

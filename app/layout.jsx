@@ -1,14 +1,11 @@
 import { ClerkProvider } from '@clerk/nextjs';
 import "./globals.css";
-import Script from 'next/script';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollProgress from '@/components/ScrollProgress';
 import ChatProvider from '@/components/Chat/ChatProvider';
 import ChatPanel from '@/components/Chat/ChatPanel';
 import NotificationProvider from '@/components/Notifications/NotificationProvider';
-
-const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-9545152753392718';
 
 export const metadata = {
   metadataBase: new URL('https://rovexedits.com'),
@@ -71,17 +68,8 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en" data-scroll-behavior="smooth">
         <head>
-          <meta name="mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <link rel="apple-touch-icon" href="/logo.png" />
-          {/* Google AdSense Verification Script */}
-          {ADSENSE_CLIENT && (
-            <script
-              async
-              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-              crossOrigin="anonymous"
-            ></script>
-          )}
         </head>
         <body>
           <ChatProvider>

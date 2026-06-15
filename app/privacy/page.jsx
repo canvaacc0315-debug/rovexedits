@@ -66,6 +66,7 @@ export default function PrivacyPage() {
           <h2 style={{ fontSize: '1.4rem', color: 'white', fontWeight: 600, marginBottom: '1rem', fontFamily: 'var(--font-display)', display: 'flex', alignItems: 'center', gap: '10px' }}><Mail size={20} color="#5865f2"/> 7. Contact Us</h2>
           <p style={{ marginBottom: '0.5rem' }}>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please reach out to us through our official channels:</p>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'rgba(255,255,255,0.8)' }}>
+            <li>• Email: <a href="mailto:vaibhavpatil0315@gmail.com" style={{ color: '#5865f2', textDecoration: 'underline' }}>vaibhavpatil0315@gmail.com</a></li>
             <li>• WhatsApp: +91 9769606096</li>
             <li>• Discord: discord.gg/RcanGzdcn</li>
             <li>• Instagram: @vai_bhav.03</li>

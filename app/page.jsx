@@ -374,22 +374,74 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* SEO / Content Expansion Block */}
-      <section style={{ position: 'relative', zIndex: 1, padding: '40px 20px 20px' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: 20, padding: 'clamp(24px, 5vw, 40px)' }}>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 16, color: 'white' }}>
-            Elevate Your Gaming Identity with <span style={{ color: '#ff4655' }}>Premium Valorant Edits</span>
-          </h2>
-          <div style={{ columnCount: 'auto', columnWidth: 350, columnGap: 30, color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', lineHeight: 1.8 }}>
-            <p style={{ marginBottom: 16 }}>
-              In the modern competitive gaming landscape, your digital presence extends far beyond your rank. A custom <strong>Valorant inventory edit</strong> is the ultimate way to showcase your dedication, style, and premium skin collections. Whether you are a top-tier radiant player, an aspiring content creator, or a dedicated collector of exclusive bundles like Kuronami or Mystbloom, a professionally designed edit highlights your unique gaming identity.
+      {/* SEO / Content Expansion Block — Premium Redesign */}
+      <section style={{ position: 'relative', zIndex: 1, padding: '60px 20px 20px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+
+          {/* Section Header */}
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'rgba(168,85,247,0.06)', color: '#a855f7', borderRadius: 9999, fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.18em', border: '1px solid rgba(168,85,247,0.1)', marginBottom: 14 }}>
+              <Sparkles size={12} /> Why Valorant Edits
+            </span>
+            <h2 style={{ fontSize: 'clamp(1.6rem, 4vw, 2.5rem)', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 10 }}>
+              Elevate Your <span className="text-gradient-shimmer">Gaming Identity</span>
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.4)', maxWidth: 520, margin: '0 auto', fontSize: '0.95rem', lineHeight: 1.6 }}>
+              More than just a screenshot — a statement of your dedication, skill, and style.
             </p>
-            <p style={{ marginBottom: 16 }}>
-              At RovexEdits, we specialize in transforming raw in-game screenshots into stunning visual masterpieces. Our hand-picked team of elite digital artists utilizes advanced rendering techniques, thematic color grading, and dynamic visual effects (VFX) to create customized showcases. These high-resolution designs are perfect for use as Twitter banners, YouTube headers, Discord profile backgrounds, and community flexing.
-            </p>
-            <p style={{ marginBottom: 0 }}>
-              We understand the nuances of the Valorant aesthetic. By blending the tactical shooter's unique art style with modern graphic design principles, our marketplace offers unparalleled quality. Browse our extensive gallery of featured edits, connect directly with our talented creators, and commission a piece of digital art that perfectly encapsulates your Valorant journey.
-            </p>
+          </div>
+
+          {/* Bento Grid Layout */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: 16 }}>
+
+            {/* Card 1 — Your Digital Identity */}
+            <motion.div whileHover={{ y: -4, borderColor: 'rgba(255,70,85,0.25)' }} transition={{ duration: 0.3 }}
+              style={{ position: 'relative', padding: 'clamp(24px, 4vw, 32px)', borderRadius: 20, background: 'linear-gradient(145deg, rgba(255,70,85,0.06) 0%, rgba(255,255,255,0.01) 100%)', border: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden', transition: 'border-color 0.3s' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent, rgba(255,70,85,0.5), transparent)' }} />
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(255,70,85,0.1)', border: '1px solid rgba(255,70,85,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18, color: '#ff4655' }}>
+                <Crosshair size={20} />
+              </div>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 10, color: 'white' }}>
+                Your Digital Identity
+              </h3>
+              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.88rem', lineHeight: 1.75 }}>
+                In the modern competitive gaming landscape, your digital presence extends far beyond your rank. A custom <strong style={{ color: 'rgba(255,255,255,0.75)' }}>Valorant inventory edit</strong> is the ultimate way to showcase your dedication, style, and premium skin collections. Whether you are a top-tier radiant player, an aspiring content creator, or a dedicated collector of exclusive bundles like Kuronami or Mystbloom, a professionally designed edit highlights your unique gaming identity.
+              </p>
+            </motion.div>
+
+            {/* Card 2 — Crafted by Artists */}
+            <motion.div whileHover={{ y: -4, borderColor: 'rgba(88,101,242,0.25)' }} transition={{ duration: 0.3 }}
+              style={{ position: 'relative', padding: 'clamp(24px, 4vw, 32px)', borderRadius: 20, background: 'linear-gradient(145deg, rgba(88,101,242,0.06) 0%, rgba(255,255,255,0.01) 100%)', border: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden', transition: 'border-color 0.3s' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent, rgba(88,101,242,0.5), transparent)' }} />
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(88,101,242,0.1)', border: '1px solid rgba(88,101,242,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18, color: '#5865f2' }}>
+                <Palette size={20} />
+              </div>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 10, color: 'white' }}>
+                Crafted by Elite Artists
+              </h3>
+              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.88rem', lineHeight: 1.75 }}>
+                At RovexEdits, we specialize in transforming raw in-game screenshots into stunning visual masterpieces. Our hand-picked team of elite digital artists utilizes advanced rendering techniques, thematic color grading, and dynamic visual effects (VFX) to create customized showcases. These high-resolution designs are perfect for use as Twitter banners, YouTube headers, Discord profile backgrounds, and community flexing.
+              </p>
+            </motion.div>
+
+            {/* Card 3 — Unparalleled Quality (Full Width) */}
+            <motion.div whileHover={{ y: -4, borderColor: 'rgba(0,255,212,0.2)' }} transition={{ duration: 0.3 }}
+              style={{ position: 'relative', padding: 'clamp(24px, 4vw, 32px)', borderRadius: 20, background: 'linear-gradient(145deg, rgba(0,255,212,0.04) 0%, rgba(255,255,255,0.01) 100%)', border: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden', gridColumn: '1 / -1', transition: 'border-color 0.3s' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent, rgba(0,255,212,0.4), transparent)' }} />
+              <div style={{ display: 'flex', gap: 'clamp(16px, 3vw, 28px)', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(0,255,212,0.08)', border: '1px solid rgba(0,255,212,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00ffd4', flexShrink: 0 }}>
+                  <Trophy size={20} />
+                </div>
+                <div style={{ flex: 1, minWidth: 240 }}>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 10, color: 'white' }}>
+                    The Valorant Design Standard
+                  </h3>
+                  <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.88rem', lineHeight: 1.75 }}>
+                    We understand the nuances of the Valorant aesthetic. By blending the tactical shooter's unique art style with modern graphic design principles, our marketplace offers unparalleled quality. Browse our extensive gallery of featured edits, connect directly with our talented creators, and commission a piece of digital art that perfectly encapsulates your Valorant journey.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
