@@ -76,7 +76,7 @@ export default function RootLayout({ children }) {
             <NotificationProvider>
               <ScrollProgress />
               <Navbar />
-              <main style={{ minHeight: '100vh' }}>{children}</main>
+              <main style={{ minHeight: '100vh', overflowX: 'hidden', width: '100%' }}>{children}</main>
               <Footer />
               <ChatPanel />
             </NotificationProvider>
