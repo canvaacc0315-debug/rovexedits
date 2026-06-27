@@ -82,8 +82,8 @@ export default function HomePage() {
       </div>
 
       {/* Hero */}
-      <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '120px 20px 60px', zIndex: 1 }}>
-        <div style={{ maxWidth: 860, margin: 'auto', textAlign: 'center', width: '100%' }}>
+      <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '120px', paddingBottom: '60px', zIndex: 1 }}>
+        <div style={{ maxWidth: 860, width: '100%', padding: '0 20px', margin: 'auto 0', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '7px 18px', borderRadius: 9999, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', marginBottom: 28 }}>
               <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#ff4655', boxShadow: '0 0 10px rgba(255,70,85,0.6)' }} />
