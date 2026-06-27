@@ -82,8 +82,8 @@ export default function HomePage() {
       </div>
 
       {/* Hero */}
-      <section style={{ position: 'relative', minHeight: '88vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 20px 60px', zIndex: 1 }}>
-        <div style={{ maxWidth: 860, margin: '0 auto', textAlign: 'center' }}>
+      <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '120px 20px 60px', zIndex: 1 }}>
+        <div style={{ maxWidth: 860, margin: 'auto', textAlign: 'center', width: '100%' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '7px 18px', borderRadius: 9999, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', marginBottom: 28 }}>
               <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#ff4655', boxShadow: '0 0 10px rgba(255,70,85,0.6)' }} />
@@ -113,14 +113,14 @@ export default function HomePage() {
 
           {/* Stats */}
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.5 }}
-            style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginTop: 56, maxWidth: 560, margin: '56px auto 0' }}>
+            style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12, marginTop: 56, maxWidth: 600, margin: '56px auto 0' }}>
             {[
               { icon: <Clock size={16} />, value: 2, label: 'Years Experience', suffix: '+' },
               { icon: <ImageIcon size={16} />, value: 1000, label: 'Edits Created', suffix: '+' },
               { icon: <Zap size={16} />, value: 24, label: 'Fast Delivery', suffix: 'h' },
             ].map((stat, i) => (
               <motion.div key={i} whileHover={{ scale: 1.04, borderColor: 'rgba(255,70,85,0.2)' }}
-                style={{ textAlign: 'center', padding: '18px 12px', borderRadius: 14, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', transition: 'all 0.3s' }}>
+                style={{ flex: '1 1 140px', textAlign: 'center', padding: '18px 12px', borderRadius: 14, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', transition: 'all 0.3s' }}>
                 <div style={{ color: '#ff4655', marginBottom: 6, display: 'flex', justifyContent: 'center' }}>{stat.icon}</div>
                 <div style={{ fontSize: 'clamp(1.3rem, 4vw, 2rem)', fontWeight: 700, color: '#ff4655', fontFamily: 'var(--font-display)' }}>
                   <CountUp to={stat.value} suffix={stat.suffix} />
