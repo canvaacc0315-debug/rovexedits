@@ -10,7 +10,7 @@ import CountUp from '@/components/CountUp';
 import TiltCard from '@/components/TiltCard';
 import InfiniteMarquee from '@/components/InfiniteMarquee';
 import ChatButton from '@/components/Chat/ChatButton';
-import { BannerAd } from '@/components/Ads/AdUnit';
+
 export default function HomePage() {
   const [featuredEdits, setFeaturedEdits] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -82,7 +82,7 @@ export default function HomePage() {
       </div>
 
       {/* Hero */}
-      <section style={{ position: 'relative', minHeight: '100vh', paddingTop: '16vh', paddingBottom: '60px', zIndex: 1 }}>
+      <section style={{ position: 'relative', minHeight: '100vh', paddingTop: '16vh', paddingBottom: '40px', zIndex: 1 }}>
         <div style={{ maxWidth: 860, margin: '0 auto', textAlign: 'center', padding: '0 20px' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '7px 18px', borderRadius: 9999, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', marginBottom: 28 }}>
@@ -143,7 +143,7 @@ export default function HomePage() {
       ]} />
 
       {/* Featured */}
-      <section style={{ position: 'relative', zIndex: 1, padding: '60px 20px' }}>
+      <section style={{ position: 'relative', zIndex: 1, padding: '30px 20px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 40 }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'rgba(255,70,85,0.06)', color: '#ff4655', borderRadius: 9999, fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.18em', border: '1px solid rgba(255,70,85,0.1)', marginBottom: 14 }}>
@@ -218,10 +218,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Ad: Between Featured and Why Choose Us */}
-      <BannerAd slot="SLOT_HOME_1" style={{ padding: '24px 20px' }} />
       {/* Why Choose Us */}
-      <section style={{ position: 'relative', zIndex: 1, padding: '60px 20px' }}>
+      <section style={{ position: 'relative', zIndex: 1, padding: '30px 20px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div style={{ marginBottom: 30 }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'rgba(255,70,85,0.06)', color: '#ff4655', borderRadius: 9999, fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.18em', border: '1px solid rgba(255,70,85,0.1)', marginBottom: 14 }}>
@@ -287,11 +285,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Ad: Between Why Choose Us and Reviews */}
-      <BannerAd slot="SLOT_HOME_2" style={{ padding: '24px 20px' }} />
       {/* Live Reviews */}
       {displayedReviews.length > 0 && (
-        <section style={{ position: 'relative', zIndex: 1, padding: '60px 20px' }}>
+        <section style={{ position: 'relative', zIndex: 1, padding: '40px 20px' }}>
           <div style={{ maxWidth: 1100, margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: 40 }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'rgba(255,70,85,0.06)', color: '#ff4655', borderRadius: 9999, fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.18em', border: '1px solid rgba(255,70,85,0.1)', marginBottom: 14 }}>
@@ -375,7 +371,7 @@ export default function HomePage() {
       )}
 
       {/* SEO / Content Expansion Block — Premium Redesign */}
-      <section style={{ position: 'relative', zIndex: 1, padding: '80px 20px 30px' }}>
+      <section style={{ position: 'relative', zIndex: 1, padding: '40px 20px 10px' }}>
         {/* Section ambient glow */}
         <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 60%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
         
